@@ -7,6 +7,8 @@ TagManager:
   - ballMap
   - ballFire
   - vienMH
+  - ballFall
+  - ground
   layers:
   - Default
   - TransparentFX

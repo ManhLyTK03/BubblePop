@@ -1,0 +1,63 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ballFall : MonoBehaviour
+{
+    public int checkConnect = 1;
+    public float overlapRadius;
+    private bool isProcessed = false; // Biến cờ để đánh dấu đã xử lý
+    
+    void Start(){
+        // chiều rộng của bóng
+        SpriteRenderer ballRenderer = GetComponent<SpriteRenderer>();
+        overlapRadius = ballRenderer.bounds.size.x/2;
+    }
+    public void _checkConnect()
+    {
+        if (isProcessed)
+            return; // Nếu đã xử lý thì không cần làm gì nữa
+
+        // Đánh dấu là đã xử lý
+        isProcessed = true;
+        checkConnect = 1;
+        // Lấy tất cả các Collider2D nằm trong bán kính nhất định
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
+        // Duyệt qua từng Collider2D
+        foreach (Collider2D collider in colliders){
+            if(collider.gameObject.CompareTag("ballMap")){
+                collider.gameObject.GetComponent<ballFall>()._checkConnect();
+            }
+        }
+        Invoke("resetCheck", 0.1f);
+    }
+    void resetCheck(){
+        isProcessed = false;
+        // Tìm tất cả các game object có tag là "ballMap"
+        GameObject[] ballMaps = GameObject.FindGameObjectsWithTag("ballMap");
+        
+        foreach (GameObject ball in ballMaps)
+        {
+            if(ball.GetComponent<ballFall>().checkConnect == 0){
+                DisableAllScripts(ball);
+                ball.tag = "ballFall";
+                // Tắt collider trigger
+                ball.GetComponent<Collider2D>().isTrigger = false;
+                ball.GetComponent<Rigidbody2D>().gravityScale = 1f;
+            }
+        }
+    }
+    // Hàm để tắt tất cả các script trên một GameObject
+    private void DisableAllScripts(GameObject obj)
+    {
+        MonoBehaviour[] scripts = obj.GetComponents<MonoBehaviour>();
+        foreach (MonoBehaviour script in scripts)
+        {
+            // Kiểm tra xem script có phải là MonoBehaviour không (để không tắt những script cần thiết)
+            if (script.GetType() != typeof(Transform))
+            {
+                script.enabled = false;
+            }
+        }
+    }
+}
