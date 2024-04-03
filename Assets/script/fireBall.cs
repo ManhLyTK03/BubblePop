@@ -3,56 +3,52 @@ using UnityEngine.EventSystems;
 
 public class fireBall : MonoBehaviour
 {
-    public float ballSpeed = 5f; // Tốc độ của quả bóng
+    public float ballSpeed = 12f; // Tốc độ của quả bóng
     public static bool boolFire = false;    
     private Vector3 direction;
-    private float leftEdgeX,rightEdgeX,topEdgeY;
     private float widthBall;
+    public Vector3 mousePosition;
+    public bool checkClickDown = false;
+    private int pointLine;
 
     void Start(){
         // Lấy ra chiều rộng và chiều cao của màn hình
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
-        // Lấy ra tọa độ của cạnh trái màn hình trong không gian thế giới
-        Vector3 leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
-        // Lấy ra tọa độ của cạnh phải màn hình trong không gian thế giới
-        Vector3 rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(screenWidth, 0, Camera.main.nearClipPlane));
-        leftEdgeX = leftEdge.x;
-        rightEdgeX = rightEdge.x;
         // chiều rộng của bóng
         SpriteRenderer ballRenderer = GetComponent<SpriteRenderer>();
         widthBall = ballRenderer.bounds.size.x/2;
     }
     void Update()
     {
-        if (Input.GetMouseButtonUp(0) && !boolFire) // Kiểm tra xem người dùng đã nhấn chuột trái chưa
+        if (Input.GetMouseButtonDown(0) && !boolFire) // Kiểm tra xem người dùng đã nhấn chuột trái chưa
         {
-            // // Kiểm tra xem chuột có đang trên một button không
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
-                if(mousePosition.y > aimingLine.limitLine){
-                    boolFire = true;// bóng đã đc bắn đi
-                    // Tính toán vector hướng từ vị trí hiện tại của quả bóng đến vị trí của chuột
-                    direction = mousePosition - transform.position;
-                    direction.z = 0f;
-                    direction.Normalize(); // Chuẩn hóa vector hướng để có độ dài là 1
-                }
+            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
+            if(mousePosition.y > aimingLine.limitLine){
+                checkClickDown = true;
+                ballCollider.isArrange = false;
+            }
+        }
+        if (Input.GetMouseButtonUp(0) && !boolFire && checkClickDown) // Kiểm tra xem người dùng đã nhấn chuột trái chưa
+        {
+            checkClickDown = true;
+            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
+            if(mousePosition.y > aimingLine.limitLine){
+                boolFire = true;// bóng đã đc bắn đi
+                pointLine = 1;
             }
         }
         if(boolFire){
-            // Di chuyển quả bóng theo hướng của chuột với tốc độ được chỉ định
-            transform.Translate(direction * ballSpeed * Time.deltaTime);
-            
-            // Kiểm tra nếu quả bóng chạm vào cạnh trái của màn hình
-            if (transform.position.x <= leftEdgeX + widthBall){
-                // Đảo ngược hướng di chuyển của quả bóng
-                direction.x = Mathf.Abs(direction.x);
-            }
-            // Kiểm tra nếu quả bóng chạm vào cạnh phải của màn hình
-            if (transform.position.x >= rightEdgeX - widthBall){
-                // Đảo ngược hướng di chuyển của quả bóng
-                direction.x = -Mathf.Abs(direction.x);
+            Vector3 targetPoint = aimingLine.pointHit[pointLine];
+            transform.position = Vector3.Lerp(transform.position, targetPoint, Time.deltaTime * ballSpeed);
+
+            // Kiểm tra nếu quả bóng đã đến gần điểm đích, thì di chuyển tiếp tới point tiếp theo
+            if (Vector3.Distance(transform.position, targetPoint) < 0.5f)
+            {
+                if(pointLine < aimingLine.pointHit.Length - 1){
+                    transform.position = targetPoint;
+                    pointLine++;
+                }
             }
         }
     }

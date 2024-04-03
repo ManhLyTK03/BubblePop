@@ -7,11 +7,13 @@ public class ballFall : MonoBehaviour
     public int checkConnect = 1;
     public float overlapRadius;
     private bool isProcessed = false; // Biến cờ để đánh dấu đã xử lý
+    public string[] tagsToSearch; // Mảng các tag cần tìm
     
     void Start(){
         // chiều rộng của bóng
         SpriteRenderer ballRenderer = GetComponent<SpriteRenderer>();
         overlapRadius = ballRenderer.bounds.size.x/2;
+        tagsToSearch = new string[]{"ballMap", "ballStone"};
     }
     public void _checkConnect()
     {
@@ -25,25 +27,29 @@ public class ballFall : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
         // Duyệt qua từng Collider2D
         foreach (Collider2D collider in colliders){
-            if(collider.gameObject.CompareTag("ballMap")){
-                collider.gameObject.GetComponent<ballFall>()._checkConnect();
+            foreach (string tagToSearch in tagsToSearch){
+                if(collider.gameObject.CompareTag(tagToSearch)){
+                    collider.gameObject.GetComponent<ballFall>()._checkConnect();
+                }
             }
         }
         Invoke("resetCheck", 0.1f);
     }
     void resetCheck(){
         isProcessed = false;
-        // Tìm tất cả các game object có tag là "ballMap"
-        GameObject[] ballMaps = GameObject.FindGameObjectsWithTag("ballMap");
-        
-        foreach (GameObject ball in ballMaps)
-        {
-            if(ball.GetComponent<ballFall>().checkConnect == 0){
-                DisableAllScripts(ball);
-                ball.tag = "ballFall";
-                // Tắt collider trigger
-                ball.GetComponent<Collider2D>().isTrigger = false;
-                ball.GetComponent<Rigidbody2D>().gravityScale = 1f;
+        foreach (string tagToSearch in tagsToSearch){
+            // Tìm tất cả các game object có tag là "ballMap"
+            GameObject[] ballMaps = GameObject.FindGameObjectsWithTag(tagToSearch);
+            
+            foreach (GameObject ball in ballMaps)
+            {
+                if(ball.GetComponent<ballFall>().checkConnect == 0){
+                    DisableAllScripts(ball);
+                    ball.tag = "ballFall";
+                    // Tắt collider trigger
+                    ball.GetComponent<Collider2D>().isTrigger = false;
+                    ball.GetComponent<Rigidbody2D>().gravityScale = 1f;
+                }
             }
         }
     }

@@ -12,7 +12,6 @@ public class ballJump : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         // Lấy ra collider của đối tượng hiện tại
         Collider2D currentCollider = GetComponent<Collider2D>();
     }
@@ -21,6 +20,7 @@ public class ballJump : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("ground")) // Kiểm tra va chạm với đối tượng được gán tag là "Ground"
         {
+            rb = GetComponent<Rigidbody2D>();
             // Lựa chọn một lực bật lên ngẫu nhiên cho quả bóng
             float randomJumpForce = Random.Range(jumpForceMin, jumpForceMax);
             // Tạo một góc bật lên ngẫu nhiên

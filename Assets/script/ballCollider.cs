@@ -4,70 +4,44 @@ using UnityEngine;
 
 public class ballCollider : MonoBehaviour
 {
-    public bool isArrange = false; // Check va chạm
+    public static bool isArrange = false; // Check va chạm
     public static bool daVacham = false; // Check va chạm công khai
-    public SpriteRenderer ballRenderer;
-    public float distanceX;
-    public float distanceY;
-    public bool check;
     // Start is called before the first frame update
     void Start(){
-        ballRenderer = GetComponent<SpriteRenderer>();
-        distanceX = ballRenderer.bounds.size.x/2;
-        distanceY = ballRenderer.bounds.size.y/2*Mathf.Sqrt(3f);
-        check = true;
     }
     void OnTriggerEnter2D(Collider2D other){
-        if(other.gameObject.tag == "ballMap" && !isArrange){
-            if(check){
-                check = false;
-                Debug.Log("sdfghjkl;lkjhgfdfghjkllkjhgfdfghjk " + this.gameObject.GetInstanceID()+" "+check);
-                fireBall.boolFire = false;
-                // Gọi hàm tắt script
-                SendMessage("TurnOffScript");
-                if(transform.position.y > other.transform.position.y && transform.position.x > other.transform.position.x){
-                    transform.position = new Vector3(other.transform.position.x + distanceX, other.transform.position.y + distanceY, transform.position.z);
-                }
-                if(transform.position.y > other.transform.position.y && transform.position.x < other.transform.position.x){
-                    transform.position = new Vector3(other.transform.position.x - distanceX, other.transform.position.y + distanceY, transform.position.z);
-                }
-                if(transform.position.y == other.transform.position.y && transform.position.x > other.transform.position.x){
-                    transform.position = new Vector3(other.transform.position.x + 2f*distanceX, other.transform.position.y, transform.position.z);
-                }
-                if(transform.position.y == other.transform.position.y && transform.position.x < other.transform.position.x){
-                    transform.position = new Vector3(other.transform.position.x - 2f*distanceX, other.transform.position.y, transform.position.z);
-                }
-                if(transform.position.y < other.transform.position.y && transform.position.x > other.transform.position.x){
-                    transform.position = new Vector3(other.transform.position.x + distanceX, other.transform.position.y - distanceY, transform.position.z);
-                }
-                if(transform.position.y < other.transform.position.y && transform.position.x < other.transform.position.x){
-                    transform.position = new Vector3(other.transform.position.x - distanceX, other.transform.position.y - distanceY, transform.position.z);
-                }
-                gameObject.tag = "ballMap";
-                // Kiểm tra xem GameObject đã có Rigidbody2D chưa
-                Rigidbody2D rb2D = GetComponent<Rigidbody2D>();
-                if (rb2D == null)
-                {
-                    // Nếu không có, thêm Rigidbody2D vào GameObject
-                    rb2D = gameObject.AddComponent<Rigidbody2D>();
-                    rb2D.gravityScale = 0f;
-                    gameObject.GetComponent<Collider2D>().isTrigger = true;
-                }
-                isArrange = true;
-                daVacham = true;
-                enabled = false;
-                creatBall.isCollider = true;
+        if(other.gameObject.tag == "ballFire" && !isArrange){
+            other.transform.position = transform.position;
+            isArrange = true;
+            fireBall.boolFire = false;
+            // Kiểm tra xem GameObject đã có Rigidbody2D chưa
+            Rigidbody2D rb2D = other.GetComponent<Rigidbody2D>();
+            if (rb2D == null){
+                // Nếu không có, thêm Rigidbody2D vào GameObject
+                rb2D = other.gameObject.AddComponent<Rigidbody2D>();
+                rb2D.gravityScale = 0f;
+                other.gameObject.GetComponent<Collider2D>().isTrigger = true;
             }
-        }
-        if(other.gameObject.tag == "ground"){
+            daVacham = true;
+            enabled = false;
             creatBall.isCollider = true;
-            Destroy(gameObject);
-            fireBall.boolFire = false;
+            gameObject.SetActive(false);
+            // Gọi hàm tắt script
+            other.SendMessage("TurnOffScript");
+            other.gameObject.tag = "ballMap";
         }
-        if(other.gameObject.tag == "ceiling"){
-            creatBall.isCollider = true;
-            Destroy(gameObject);
+        if((other.gameObject.tag == "ballBoom" || other.gameObject.tag == "ballLine" || other.gameObject.tag == "ballLaze" || other.gameObject.tag == "ballRainbow") && !isArrange){
+            buttonBoom.boolBoom = true;
+            isArrange = true;
             fireBall.boolFire = false;
+            creatBall.isCollider = true;
+            gameObject.SetActive(false);
+            ghiban.checkGhiban = true;
+            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
+                Destroy(ballMap);
+            }
+            Destroy(other.gameObject);
+            other.gameObject.tag = "ballMap";
         }
     }
 }

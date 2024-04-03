@@ -9,6 +9,14 @@ TagManager:
   - vienMH
   - ballFall
   - ground
+  - wallTop
+  - ballCheck
+  - ballBoom
+  - boomMap
+  - ballLine
+  - ballLaze
+  - ballRainbow
+  - ballStone
   layers:
   - Default
   - TransparentFX
@@ -18,7 +26,7 @@ TagManager:
   - UI
   - 
   - 
-  - line
+  - hitCollider
   - 
   - ballFire
   - 

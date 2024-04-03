@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4419695676943930548}
   - component: {fileID: 3908490947912936646}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ballRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,16 +94,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3376019903800359846}
   - component: {fileID: 4426213192208657638}
-  - component: {fileID: 277966258656568576}
-  - component: {fileID: 4609328303506382127}
-  - component: {fileID: 7522258452153203420}
   - component: {fileID: 2795806385005284683}
-  - component: {fileID: 7844314357516308101}
   - component: {fileID: 2438335973181607106}
   - component: {fileID: 2057470281526938339}
-  - component: {fileID: 7402205341726725955}
   - component: {fileID: 6643266310848546804}
-  m_Layer: 0
+  - component: {fileID: 7705120551447207257}
+  - component: {fileID: 994694752919816695}
+  m_Layer: 8
   m_Name: ballFire
   m_TagString: ballFire
   m_Icon: {fileID: 0}
@@ -178,7 +175,70 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &277966258656568576
+--- !u!114 &2795806385005284683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4608967640174541184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea98f9b7804b7224b9f5a3238c5df90e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballSpeed: 10
+  mousePosition: {x: 0, y: 0, z: 0}
+  checkClickDown: 0
+--- !u!114 &2438335973181607106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4608967640174541184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81c5bb12242c6e04cb2ab96520523d00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkConnect: 1
+  overlapRadius: 0
+--- !u!114 &2057470281526938339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4608967640174541184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2635a3ea8f005fc4ca71334af886b6fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpForceMin: 5
+  jumpForceMax: 7
+  jumpForce: 10
+  maxAngleVariation: 30
+  fadeDuration: 1
+--- !u!114 &6643266310848546804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4608967640174541184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0781efe881a9749a1062679b1a12c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlapRadius: 0
+  widthBall: 0
+  ballRenderer: {fileID: 0}
+  objectColor: 
+  checkSoluong: 0
+--- !u!58 &7705120551447207257
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -213,110 +273,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!50 &4609328303506382127
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &7522258452153203420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f539a135f04ab409df766e4f74cbf2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isArrange: 0
-  ballRenderer: {fileID: 0}
-  distanceX: 0
-  distanceY: 0
---- !u!114 &2795806385005284683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea98f9b7804b7224b9f5a3238c5df90e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ballSpeed: 8
---- !u!114 &7844314357516308101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f539a135f04ab409df766e4f74cbf2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isArrange: 0
-  ballRenderer: {fileID: 0}
-  distanceX: 0
-  distanceY: 0
---- !u!114 &2438335973181607106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81c5bb12242c6e04cb2ab96520523d00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkConnect: 1
-  overlapRadius: 0
---- !u!114 &2057470281526938339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2635a3ea8f005fc4ca71334af886b6fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForceMin: 5
-  jumpForceMax: 7
-  jumpForce: 10
-  maxAngleVariation: 30
-  fadeDuration: 1
---- !u!114 &7402205341726725955
+--- !u!114 &994694752919816695
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -331,19 +288,3 @@ MonoBehaviour:
   overlapRadius: 0
   widthBall: 0
   ballRenderer: {fileID: 0}
---- !u!114 &6643266310848546804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff0781efe881a9749a1062679b1a12c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overlapRadius: 0
-  widthBall: 0
-  ballRenderer: {fileID: 0}
-  objectColor: 

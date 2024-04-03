@@ -14,7 +14,6 @@ public class setCam : MonoBehaviour
         widthBall = ballRenderer.bounds.size.x;
         mainCamera = Camera.main;
         mainCamera.orthographicSize = (widthBall * Screen.height / Screen.width * 0.5f) * 11f;
-        Debug.Log(mainCamera.orthographicSize);
     }
 
     // Update is called once per frame

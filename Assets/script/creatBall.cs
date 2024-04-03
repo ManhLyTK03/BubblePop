@@ -106,9 +106,6 @@ public class creatBall : MonoBehaviour
             newBallFire.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = fireSprite;
         }
         n = ballCollor[Random.Range(0, ballCollor.Length)]; // gán n bằng 1 màu ngẫu nhiên
-        if(ballCollor.Length == 1){
-            mapRandom.checkWin = true;
-        }
         newBallNext = Instantiate(ballNext, pointNext.position, Quaternion.identity); // Tạo bóng next mới
         nextSprite = GetSprite(n); // Lấy sprite dựa trên tên
         if (nextSprite != null)
@@ -127,25 +124,26 @@ public class creatBall : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Không tìm thấy sprite có tên: " + spriteName);
             return null;
         }
     }
     public void _swapBall(){
-        string a = m;
-        m = n;
-        n = a;
-        fireSprite = GetSprite(m); // Lấy sprite dựa trên tên
-        if (fireSprite != null)
-        {
-            // Sử dụng sprite được tìm thấy
-            newBallFire.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = fireSprite;
-        }
-        nextSprite = GetSprite(n); // Lấy sprite dựa trên tên
-        if (nextSprite != null)
-        {
-            // Sử dụng sprite được tìm thấy
-            newBallNext.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = nextSprite;
+        if(buttonBoom.boolBoom){
+            string a = m;
+            m = n;
+            n = a;
+            fireSprite = GetSprite(m); // Lấy sprite dựa trên tên
+            if (fireSprite != null)
+            {
+                // Sử dụng sprite được tìm thấy
+                newBallFire.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = fireSprite;
+            }
+            nextSprite = GetSprite(n); // Lấy sprite dựa trên tên
+            if (nextSprite != null)
+            {
+                // Sử dụng sprite được tìm thấy
+                newBallNext.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = nextSprite;
+            }
         }
     }
 }

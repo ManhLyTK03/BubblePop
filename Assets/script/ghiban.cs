@@ -9,6 +9,7 @@ public class ghiban : MonoBehaviour
     public SpriteRenderer ballRenderer;
     public static bool checkGhiban = false;
     public string objectColor;
+    public int checkSoluong;
 
     private bool isProcessed = false; // Biến cờ để đánh dấu đã xử lý
     void Start(){
@@ -28,23 +29,25 @@ public class ghiban : MonoBehaviour
 
         // Lấy tất cả các Collider2D nằm trong bán kính nhất định
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
-        int checkSoluong = 0;
-        // Duyệt qua từng Collider2D và in ra thông tin của GameObjects
-        foreach (Collider2D collider in colliders)
-        {
-            // Kiểm tra xem GameObject
-            if (collider.gameObject != gameObject && !collider.gameObject.CompareTag("vienMH")){
-                // Kiểm tra màu sắc của gameObject va chạm
-                objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
-                if (objectColor == colorBall){
-                    checkSoluong++;
+        checkSoluong = 0;
+        if(!check){
+            // Duyệt qua từng Collider2D và in ra thông tin của GameObjects
+            foreach (Collider2D collider in colliders)
+            {
+                // Kiểm tra xem GameObject
+                if (collider.gameObject != gameObject && collider.tag == "ballMap"){
+                    // Kiểm tra màu sắc của gameObject va chạm
+                    objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                    if (objectColor == colorBall){
+                        checkSoluong++;
+                    }
                 }
             }
         }
         if(checkSoluong >= 2){
             foreach (Collider2D collider in colliders){
                 // Kiểm tra xem GameObject
-                if (collider.gameObject != gameObject && !collider.gameObject.CompareTag("vienMH")){
+                if (collider.gameObject != gameObject && collider.tag == "ballMap"){
                     // Kiểm tra màu sắc của gameObject va chạm
                     objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
                     if (objectColor == colorBall){
@@ -62,7 +65,7 @@ public class ghiban : MonoBehaviour
             if(check){
                 foreach (Collider2D collider in colliders){
                     // Kiểm tra xem GameObject
-                    if (collider.gameObject != gameObject && !collider.gameObject.CompareTag("vienMH")){
+                    if (collider.gameObject != gameObject && collider.tag == "ballMap"){
                         // Kiểm tra màu sắc của gameObject va chạm
                         objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
                         if (objectColor == colorBall){
