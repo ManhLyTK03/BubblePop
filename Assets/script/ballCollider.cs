@@ -29,19 +29,21 @@ public class ballCollider : MonoBehaviour
             // Gọi hàm tắt script
             other.SendMessage("TurnOffScript");
             other.gameObject.tag = "ballMap";
+            other.transform.parent = GameObject.FindWithTag("mapRD").transform;
         }
         if((other.gameObject.tag == "ballBoom" || other.gameObject.tag == "ballLine" || other.gameObject.tag == "ballLaze" || other.gameObject.tag == "ballRainbow") && !isArrange){
+            string tag = other.gameObject.tag;
             buttonBoom.boolBoom = true;
             isArrange = true;
             fireBall.boolFire = false;
-            creatBall.isCollider = true;
             gameObject.SetActive(false);
             ghiban.checkGhiban = true;
             foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
                 Destroy(ballMap);
             }
+            creatBall.isCollider = true;
             Destroy(other.gameObject);
-            other.gameObject.tag = "ballMap";
+            other.gameObject.tag = tag;
         }
     }
 }

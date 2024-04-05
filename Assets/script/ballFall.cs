@@ -13,7 +13,7 @@ public class ballFall : MonoBehaviour
         // chiều rộng của bóng
         SpriteRenderer ballRenderer = GetComponent<SpriteRenderer>();
         overlapRadius = ballRenderer.bounds.size.x/2;
-        tagsToSearch = new string[]{"ballMap", "ballStone"};
+        tagsToSearch = new string[]{"ballMap", "ballStone","ballHole", "ballIce"};
     }
     public void _checkConnect()
     {

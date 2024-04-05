@@ -17,6 +17,9 @@ TagManager:
   - ballLaze
   - ballRainbow
   - ballStone
+  - ballHole
+  - ballIce
+  - mapRD
   layers:
   - Default
   - TransparentFX

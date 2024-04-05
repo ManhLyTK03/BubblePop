@@ -9,7 +9,7 @@ public class creatAnchor : MonoBehaviour
     void Start(){
         // Lấy BoxCollider2D từ GameObject hiện tại
         boxCollider = GetComponent<BoxCollider2D>();
-        tagsToSearch = new string[]{"ballMap", "ballStone"};
+        tagsToSearch = new string[]{"ballMap", "ballStone", "ballHole", "ballIce"};
     }
     void Update(){
         if(ghiban.checkGhiban){

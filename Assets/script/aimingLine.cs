@@ -15,7 +15,6 @@ public class aimingLine : MonoBehaviour
     public float widthBall;// chiều rộng của bóng
     public float distanceX,distanceY;
     public float leftEdgeX;
-    public string[] tagsToSearch; // Mảng các tag cần tìm
 
     void Start(){
         lineRenderer = GetComponent<LineRenderer>();
@@ -26,7 +25,6 @@ public class aimingLine : MonoBehaviour
         distanceX = widthBall/2;
         distanceY = widthBall/2*Mathf.Sqrt(3f);
         leftEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;// Lấy tọa độ x của cạnh trái (left) của màn hình
-        tagsToSearch = new string[]{"ballMap", "boomMap", "ballStone"};
     }
     void Update()
     {
@@ -65,7 +63,7 @@ public class aimingLine : MonoBehaviour
                 direction = (mousePosition - startPoint.position).normalized;
                 
                 // Tạo một ray từ vị trí của đối tượng đến chuột
-                hit = Physics2D.Raycast(startPoint.position, direction,9999f, ~LayerMask.GetMask(new string[]{"ballFire"})); 
+                hit = Physics2D.Raycast(startPoint.position, direction,9999f); 
                     
                 lineRenderer.SetPosition(0, pointHit[0]);
                 if(ballFireObject.tag == "ballLine"){
@@ -82,7 +80,7 @@ public class aimingLine : MonoBehaviour
                             lineRenderer.SetPosition(i, pointHit[i]);
                             if(hit.collider.tag == "vienMH"){
                                 direction = Vector2.Reflect(direction, hit.normal);
-                                hit = Physics2D.Raycast(pointHit[i], direction,9999f, ~LayerMask.GetMask(new string[]{"ballCheck"}));
+                                hit = Physics2D.Raycast(pointHit[i], direction,9999f);
                             }
                             else{
                                 break;
@@ -90,53 +88,49 @@ public class aimingLine : MonoBehaviour
                         }
                     }
                 }
-                
-                // Duyệt qua mỗi tag trong mảng tagsToSearch
-                foreach (string tagToSearch in tagsToSearch){
-                    if(hit.collider.tag == tagToSearch){
-                        // Tính vector hướng của đường thẳng
-                        Vector2 direction = pointHit[pointHit.Length-1] - hit.collider.transform.position;
+                if(hit.collider.tag == "ballMap" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap" || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce"){
+                    // Tính vector hướng của đường thẳng
+                    Vector2 direction = pointHit[pointHit.Length-1] - hit.collider.transform.position;
 
-                        // Tính góc giữa vector hướng và trục Ox
-                        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    // Tính góc giữa vector hướng và trục Ox
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-                        // Đảm bảo góc nằm trong khoảng [0, 360)
-                        angle = (angle + 360) % 360;
-                        if(angle > 270f && angle <= 330f){
-                            pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
-                        }
-                        else if(angle > 210f && angle <= 270f){
+                    // Đảm bảo góc nằm trong khoảng [0, 360)
+                    angle = (angle + 360) % 360;
+                    if(angle > 270f && angle <= 330f){
+                        pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
+                    }
+                    else if(angle > 210f && angle <= 270f){
+                        pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
+                    }
+                    else if(angle > 90f && angle <= 210f){
+                        pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - 2f*distanceX, hit.collider.transform.position.y, transform.position.z);
+                    }
+                    else{
+                        pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + 2f*distanceX, hit.collider.transform.position.y, transform.position.z);
+                    }
+                    // Kiểm tra xem có GameObject nào ở vị trí pointPosition có tag là "ball" không
+                    Collider2D colliderCheckpoint = Physics2D.OverlapPoint(pointHit[pointHit.Length - 1]);
+                    if (colliderCheckpoint != null && (hit.collider.tag == "ballMap" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap" || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce" || colliderCheckpoint.CompareTag("vienMH")))
+                    {
+                        if(angle > 90f && angle <= 210f){
                             pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
                         }
-                        else if(angle > 90f && angle <= 210f){
-                            pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - 2f*distanceX, hit.collider.transform.position.y, transform.position.z);
+                        else if(angle > 270f && angle <= 330f){
+                            pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
+                        }
+                        else if(angle > 210f && angle <= 270f){
+                            pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
                         }
                         else{
-                            pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + 2f*distanceX, hit.collider.transform.position.y, transform.position.z);
-                        }
-                        // Kiểm tra xem có GameObject nào ở vị trí pointPosition có tag là "ball" không
-                        Collider2D colliderCheckpoint = Physics2D.OverlapPoint(pointHit[pointHit.Length - 1]);
-                        if (colliderCheckpoint != null && (colliderCheckpoint.CompareTag(tagToSearch) || colliderCheckpoint.CompareTag("vienMH")))
-                        {
-                            if(angle > 90f && angle <= 210f){
-                                pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
-                            }
-                            else if(angle > 270f && angle <= 330f){
-                                pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
-                            }
-                            else if(angle > 210f && angle <= 270f){
-                                pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
-                            }
-                            else{
-                                pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
-                            }
+                            pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x + distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
                         }
                     }
                 }
                 if(hit.collider.tag  == "wallTop"){
                     float min = widthBall/2f;
                     float positionBall = 0f;
-                    for (float i = leftEdgeX + widthBall/2;i<=widthBall*11; i += widthBall)
+                    for (float i = leftEdgeX + widthBall;i<=widthBall*11; i += widthBall)
                     {
                         if(min >= Mathf.Abs(hit.point.x - i)){
                             min = Mathf.Abs(hit.point.x - i);
@@ -147,7 +141,7 @@ public class aimingLine : MonoBehaviour
                     pointHit[pointHit.Length - 1] = new Vector3(positionBall,hit.collider.transform.position.y - widthBall/2,0f);
                     // Kiểm tra xem có GameObject nào ở vị trí pointPosition có tag là "ball" không
                     Collider2D colliderCheckpoint = Physics2D.OverlapPoint(pointHit[pointHit.Length - 1]);
-                    if (colliderCheckpoint != null && colliderCheckpoint.CompareTag("ballMap"))
+                    if (colliderCheckpoint != null && (hit.collider.tag == "ballMap" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap") || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce")
                     {
                         if(hit.point.x < pointHit[pointHit.Length - 1].x){
                             pointHit[pointHit.Length - 1].x = pointHit[pointHit.Length - 1].x - widthBall;

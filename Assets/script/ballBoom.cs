@@ -11,10 +11,12 @@ public class ballBoom : MonoBehaviour
     public SpriteRenderer ballRenderer;
     public Vector3 mousePosition;
     public Sprite spriteBoom;
+    public Sprite spriteIce;
     public bool clickFire = false;
     private BoxCollider2D boxCollider;
     private Vector3 pointStart;
     public string[] tagsToSearch; // Mảng các tag cần tìm
+    public string[] tagsMap; // Mảng các tag cần tìm
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +26,8 @@ public class ballBoom : MonoBehaviour
         // chiều rộng của bóng
         widthBall = ballRenderer.bounds.size.x;
         overlapRadius = widthBall/2;
-        tagsToSearch = new string[]{"ballMap", "ballStone"};
+        tagsToSearch = new string[]{"ballHole", "ballStone","ballMap", "ballIce"};
+        System.Array.Copy(tagsMap, tagsToSearch, tagsMap.Length);
     }
 
     // Update is called once per frame
@@ -34,17 +37,56 @@ public class ballBoom : MonoBehaviour
         {
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
             if(mousePosition.y > aimingLine.limitLine){
+                ballCheck = GameObject.FindWithTag("ballCheck");
                 clickFire = true;
             }
         }
         if(Input.GetMouseButtonUp(0)){
             clickFire = false;
+            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
+            if(mousePosition.y <= aimingLine.limitLine){
+                foreach (GameObject ballReset in GameObject.FindGameObjectsWithTag("boomMap")){
+                    ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballReset.GetComponent<SpriteRenderer>().sprite;
+                    if (ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
+                    {
+                        ballReset.GetComponent<SpriteRenderer>().sprite = spriteIce;
+                    }
+                    else{
+                        ballReset.gameObject.tag = "ballMap";
+                    }
+                    // Duyệt qua mỗi tag trong mảng tagsToSearch
+                    foreach (string tagMap in tagsMap){
+                        if(ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name == tagMap){
+                            ballReset.gameObject.tag = tagMap;
+                        }
+                        if (ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
+                        {
+                            ballReset.gameObject.tag = "ballIce";
+                        }
+                    }
+                }
+            }
         }
         if(clickFire){
-            ballCheck = GameObject.FindWithTag("ballCheck");
             foreach (GameObject ballReset in GameObject.FindGameObjectsWithTag("boomMap")){
                 ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballReset.GetComponent<SpriteRenderer>().sprite;
-                ballReset.gameObject.tag = "ballMap";
+                if (ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
+                {
+                    ballReset.GetComponent<SpriteRenderer>().sprite = spriteIce;
+                }
+                else{
+                    ballReset.gameObject.tag = "ballMap";
+                }
+                // Duyệt qua mỗi tag trong mảng tagsToSearch
+                foreach (string tagMap in tagsMap){
+                    if(ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name == tagMap){
+                        ballReset.gameObject.tag = tagMap;
+                    }
+                    if (ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
+                    {
+                        ballReset.gameObject.tag = "ballIce";
+                    }
+                }
             }
             if(gameObject.tag == "ballBoom"){
                 
@@ -123,8 +165,12 @@ public class ballBoom : MonoBehaviour
                     // Duyệt qua mỗi tag trong mảng tagsToSearch
                     foreach (string tagToSearch in tagsToSearch)
                     {
-                        if(col.gameObject.tag == tagToSearch){
+                        if(col.gameObject.tag == tagToSearch && col.gameObject.tag != "ballHole" && col.gameObject.tag != "ballStone"){
                             Sprite newSprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                            if (newSprite.name.EndsWith("Ice"))
+                            {
+                                newSprite = col.gameObject.GetComponent<SpriteRenderer>().sprite;
+                            }
                             // Kiểm tra xem biến đã tồn tại trong mảng chưa
                             if (!spriteCheck.Contains(newSprite))
                             {
@@ -143,6 +189,15 @@ public class ballBoom : MonoBehaviour
                             ballMap.gameObject.GetComponent<SpriteRenderer>().sprite = ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
                             ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
                             ballMap.gameObject.tag = "boomMap";
+                        }
+                        if(ballMap.tag == "ballIce"){
+                            if (spriteCheck.Contains(ballMap.gameObject.GetComponent<SpriteRenderer>().sprite)){
+                                // đổi màu
+                                spriteIce = ballMap.gameObject.GetComponent<SpriteRenderer>().sprite;
+                                ballMap.gameObject.GetComponent<SpriteRenderer>().sprite = ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                                ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
+                                ballMap.gameObject.tag = "boomMap";
+                            }
                         }
                     }
                 }

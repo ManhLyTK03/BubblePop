@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 
 public class ghiban : MonoBehaviour
 {
@@ -35,9 +36,14 @@ public class ghiban : MonoBehaviour
             foreach (Collider2D collider in colliders)
             {
                 // Kiểm tra xem GameObject
-                if (collider.gameObject != gameObject && collider.tag == "ballMap"){
+                if (collider.gameObject != gameObject && (collider.tag == "ballMap" || collider.tag == "ballIce")){
                     // Kiểm tra màu sắc của gameObject va chạm
                     objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                    if (objectColor.EndsWith("Ice"))
+                    {
+                        // Nếu có, loại bỏ "Ice" từ phần tử
+                        objectColor = objectColor.Substring(0, objectColor.Length - 3);
+                    }
                     if (objectColor == colorBall){
                         checkSoluong++;
                     }
@@ -47,12 +53,28 @@ public class ghiban : MonoBehaviour
         if(checkSoluong >= 2){
             foreach (Collider2D collider in colliders){
                 // Kiểm tra xem GameObject
-                if (collider.gameObject != gameObject && collider.tag == "ballMap"){
+                if (collider.gameObject != gameObject && (collider.tag == "ballMap" || collider.tag == "ballIce")){
                     // Kiểm tra màu sắc của gameObject va chạm
                     objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                    if (objectColor.EndsWith("Ice"))
+                    {
+                        // Nếu có, loại bỏ "Ice" từ phần tử
+                        objectColor = objectColor.Substring(0, objectColor.Length - 3);
+                    }
+                    if (colorBall.EndsWith("Ice"))
+                    {
+                        // Nếu có, loại bỏ "Ice" từ phần tử
+                        colorBall = colorBall.Substring(0, colorBall.Length - 3);
+                    }
                     if (objectColor == colorBall){
                         if(collider.gameObject.GetComponent<ghiban>().isProcessed){
-                            Destroy(collider.gameObject);
+                            if(collider.tag == "ballIce"){
+                                SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { collider.gameObject }).ToArray();
+                                collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = collider.GetComponent<SpriteRenderer>().sprite;
+                            }
+                            else{
+                                Destroy(collider.gameObject);
+                            }
                         }
                         else{
                             collider.gameObject.GetComponent<ghiban>()._ghiban(true);
@@ -65,12 +87,30 @@ public class ghiban : MonoBehaviour
             if(check){
                 foreach (Collider2D collider in colliders){
                     // Kiểm tra xem GameObject
-                    if (collider.gameObject != gameObject && collider.tag == "ballMap"){
+                    if (collider.gameObject != gameObject && (collider.tag == "ballMap" || collider.tag == "ballIce")){
                         // Kiểm tra màu sắc của gameObject va chạm
                         objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                        if (objectColor.EndsWith("Ice"))
+                        {
+                            // Nếu có, loại bỏ "Ice" từ phần tử
+                            objectColor = objectColor.Substring(0, objectColor.Length - 3);
+                        }
+                        if (colorBall.EndsWith("Ice"))
+                        {
+                            // Nếu có, loại bỏ "Ice" từ phần tử
+                            colorBall = colorBall.Substring(0, colorBall.Length - 3);
+                        }
                         if (objectColor == colorBall){
                             if(collider.gameObject.GetComponent<ghiban>().isProcessed){
-                                Destroy(collider.gameObject);
+                                if(collider.gameObject.GetComponent<ghiban>().isProcessed){
+                                    if(collider.tag == "ballIce"){
+                                        SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { collider.gameObject }).ToArray();
+                                        collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = collider.GetComponent<SpriteRenderer>().sprite;
+                                    }
+                                    else{
+                                        Destroy(collider.gameObject);
+                                    }
+                                }
                             }
                             else{
                                 collider.gameObject.GetComponent<ghiban>()._ghiban(true);
@@ -78,11 +118,26 @@ public class ghiban : MonoBehaviour
                         }
                     }
                 }
-                Destroy(gameObject);
+                if(gameObject.GetComponent<ghiban>().isProcessed){
+                    if(gameObject.tag == "ballIce"){
+                        SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { gameObject }).ToArray();
+                        gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+                    }
+                    else{
+                        Destroy(gameObject);
+                    }
+                }
             }
         }
         checkGhiban = true;
+        Invoke("setBallIce", 0.1f);
         Invoke("resetCheck", 0.5f);
+    }
+    void setBallIce(){
+        foreach (GameObject ballIce in SetPosition.ballIces){
+            ballIce.tag = "ballMap";
+        }
+        SetPosition.ballIces = new GameObject[0];
     }
     void resetCheck(){
         isProcessed = false;

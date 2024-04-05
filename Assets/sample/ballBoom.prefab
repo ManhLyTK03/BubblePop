@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 121290315977745157}
   - component: {fileID: 8782326961399631491}
   - component: {fileID: 3978021215577715746}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ballBoom
   m_TagString: ballBoom
   m_Icon: {fileID: 0}
@@ -158,6 +158,8 @@ MonoBehaviour:
   mousePosition: {x: 0, y: 0, z: 0}
   spriteBoom: {fileID: 21300000, guid: 0b9e9ffc187d5a44a82f9a9e3db4dc4c, type: 3}
   clickFire: 0
+  tagsToSearch: []
+  tagsMap: []
 --- !u!61 &3978021215577715746
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -213,7 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6468105904316387450}
   - component: {fileID: 8340759778315086026}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ballRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}

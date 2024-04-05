@@ -11,9 +11,11 @@ public class buttonBoom : MonoBehaviour
     public GameObject newBallBoom; // bóng boom
     public Sprite spriteOld; //img bóng cũ
     public static bool boolBoom; //xác định việc tạo bóng Boom
+    public string[] tagsMap; // Mảng các tag cần tìm
     // Update is called once per frame
     public void Start(){
         boolBoom = true;
+        tagsMap = new string[]{"ballHole", "ballStone","ballMap"};
     }
     public void creatBoom()
     {
@@ -29,10 +31,6 @@ public class buttonBoom : MonoBehaviour
             newBallBoom = Instantiate(ballFireMau, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
             newBallBoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteOld;
             Destroy(ballFire);
-            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
-                ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballMap.GetComponent<SpriteRenderer>().sprite;
-                ballMap.tag = "ballMap";
-            }
         }
         boolBoom = !boolBoom;
     }
@@ -50,10 +48,6 @@ public class buttonBoom : MonoBehaviour
             newBallBoom = Instantiate(ballFireMau, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
             newBallBoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteOld;
             Destroy(ballFire);
-            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
-                ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballMap.GetComponent<SpriteRenderer>().sprite;
-                ballMap.tag = "ballMap";
-            }
         }
         boolBoom = !boolBoom;
     }
@@ -71,10 +65,6 @@ public class buttonBoom : MonoBehaviour
             newBallBoom = Instantiate(ballFireMau, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
             newBallBoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteOld;
             Destroy(ballFire);
-            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
-                ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballMap.GetComponent<SpriteRenderer>().sprite;
-                ballMap.tag = "ballMap";
-            }
         }
         boolBoom = !boolBoom;
     }
@@ -92,10 +82,6 @@ public class buttonBoom : MonoBehaviour
             newBallBoom = Instantiate(ballFireMau, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
             newBallBoom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteOld;
             Destroy(ballFire);
-            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
-                ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballMap.GetComponent<SpriteRenderer>().sprite;
-                ballMap.tag = "ballMap";
-            }
         }
         boolBoom = !boolBoom;
     }
