@@ -6,6 +6,7 @@ using System.Linq;
 public class ballBoom : MonoBehaviour
 {
     public GameObject ballCheck;
+    public static float maxCeiling;
     public float overlapRadius; // Bán kính để tìm các GameObject khác va chạm với "ball"
     public float widthBall;
     public SpriteRenderer ballRenderer;
@@ -26,17 +27,16 @@ public class ballBoom : MonoBehaviour
         // chiều rộng của bóng
         widthBall = ballRenderer.bounds.size.x;
         overlapRadius = widthBall/2;
-        tagsToSearch = new string[]{"ballHole", "ballStone","ballMap", "ballIce"};
+        tagsToSearch = new string[]{"ballHole", "ballStone","ballMap","ballIce"};
         System.Array.Copy(tagsMap, tagsToSearch, tagsMap.Length);
     }
-
     // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && !fireBall.boolFire) // Kiểm tra xem người dùng đã nhấn chuột trái chưa
         {
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
-            if(mousePosition.y > aimingLine.limitLine){
+            if(mousePosition.y > aimingLine.minLine && mousePosition.y < aimingLine.maxLine){
                 ballCheck = GameObject.FindWithTag("ballCheck");
                 clickFire = true;
             }
@@ -44,24 +44,14 @@ public class ballBoom : MonoBehaviour
         if(Input.GetMouseButtonUp(0)){
             clickFire = false;
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
-            if(mousePosition.y <= aimingLine.limitLine){
+            if(mousePosition.y < aimingLine.minLine || mousePosition.y > aimingLine.maxLine){
                 foreach (GameObject ballReset in GameObject.FindGameObjectsWithTag("boomMap")){
                     ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballReset.GetComponent<SpriteRenderer>().sprite;
-                    if (ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
-                    {
-                        ballReset.GetComponent<SpriteRenderer>().sprite = spriteIce;
-                    }
-                    else{
-                        ballReset.gameObject.tag = "ballMap";
-                    }
+                    ballReset.gameObject.tag = "ballMap";
                     // Duyệt qua mỗi tag trong mảng tagsToSearch
                     foreach (string tagMap in tagsMap){
                         if(ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name == tagMap){
                             ballReset.gameObject.tag = tagMap;
-                        }
-                        if (ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
-                        {
-                            ballReset.gameObject.tag = "ballIce";
                         }
                     }
                 }
@@ -70,21 +60,12 @@ public class ballBoom : MonoBehaviour
         if(clickFire){
             foreach (GameObject ballReset in GameObject.FindGameObjectsWithTag("boomMap")){
                 ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = ballReset.GetComponent<SpriteRenderer>().sprite;
-                if (ballReset.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
-                {
-                    ballReset.GetComponent<SpriteRenderer>().sprite = spriteIce;
-                }
-                else{
-                    ballReset.gameObject.tag = "ballMap";
-                }
+                ballReset.GetComponent<SpriteRenderer>().sprite = spriteIce;
+                ballReset.gameObject.tag = "ballMap";
                 // Duyệt qua mỗi tag trong mảng tagsToSearch
                 foreach (string tagMap in tagsMap){
                     if(ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name == tagMap){
                         ballReset.gameObject.tag = tagMap;
-                    }
-                    if (ballReset.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name.EndsWith("Ice"))
-                    {
-                        ballReset.gameObject.tag = "ballIce";
                     }
                 }
             }
@@ -96,12 +77,14 @@ public class ballBoom : MonoBehaviour
                     // Lấy tất cả các Collider2D nằm trong bán kính nhất định
                     Collider2D[] colliders = Physics2D.OverlapCircleAll(ballCheck.transform.position, overlapRadius*3f);
                     foreach (Collider2D col in colliders){
-                        // Kiểm tra xem GameObject
-                        if(col.gameObject.CompareTag(tagToSearch)){
-                            // đổi màu
-                            col.gameObject.GetComponent<SpriteRenderer>().sprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
-                            col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
-                            col.gameObject.tag = "boomMap";
+                        if(col.gameObject.transform.position.y < maxCeiling){
+                            // Kiểm tra xem GameObject
+                            if(col.gameObject.CompareTag(tagToSearch)){
+                                // đổi màu
+                                col.gameObject.GetComponent<SpriteRenderer>().sprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                                col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
+                                col.gameObject.tag = "boomMap";
+                            }
                         }
                     }
                 }
@@ -118,12 +101,14 @@ public class ballBoom : MonoBehaviour
                     // Duyệt qua mỗi tag trong mảng tagsToSearch
                     foreach (string tagToSearch in tagsToSearch)
                     {
-                        // Kiểm tra xem GameObject
-                        if(col.gameObject.CompareTag(tagToSearch)){
-                            // đổi màu
-                            col.gameObject.GetComponent<SpriteRenderer>().sprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
-                            col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
-                            col.gameObject.tag = "boomMap";
+                        if(col.gameObject.transform.position.y < maxCeiling){
+                            // Kiểm tra xem GameObject
+                            if(col.gameObject.CompareTag(tagToSearch)){
+                                // đổi màu
+                                col.gameObject.GetComponent<SpriteRenderer>().sprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                                col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
+                                col.gameObject.tag = "boomMap";
+                            }
                         }
                     }
                 }
@@ -133,7 +118,7 @@ public class ballBoom : MonoBehaviour
                 foreach (string tagToSearch in tagsToSearch)
                 {
                     foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag(tagToSearch)){
-                        if(ballMap.transform.position.y <= ballCheck.transform.position.y + 0.1f && ballMap.transform.position.y >= ballCheck.transform.position.y - 0.1f){
+                        if(ballMap.transform.position.y <= ballCheck.transform.position.y + 0.1f && ballMap.transform.position.y >= ballCheck.transform.position.y - 0.1f && ballMap.transform.position.y < maxCeiling){
                             // đổi màu
                             ballMap.gameObject.GetComponent<SpriteRenderer>().sprite = ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
                             ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
@@ -147,12 +132,14 @@ public class ballBoom : MonoBehaviour
                     // Duyệt qua mỗi tag trong mảng tagsToSearch
                     foreach (string tagToSearch in tagsToSearch)
                     {
-                        // Kiểm tra xem GameObject
-                        if(col.gameObject.CompareTag(tagToSearch)){
-                            // đổi màu
-                            col.gameObject.GetComponent<SpriteRenderer>().sprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
-                            col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
-                            col.gameObject.tag = "boomMap";
+                        if(col.gameObject.transform.position.y < maxCeiling){
+                            // Kiểm tra xem GameObject
+                            if(col.gameObject.CompareTag(tagToSearch)){
+                                // đổi màu
+                                col.gameObject.GetComponent<SpriteRenderer>().sprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                                col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
+                                col.gameObject.tag = "boomMap";
+                            }
                         }
                     }
                 }
@@ -166,16 +153,14 @@ public class ballBoom : MonoBehaviour
                     foreach (string tagToSearch in tagsToSearch)
                     {
                         if(col.gameObject.tag == tagToSearch && col.gameObject.tag != "ballHole" && col.gameObject.tag != "ballStone"){
-                            Sprite newSprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
-                            if (newSprite.name.EndsWith("Ice"))
-                            {
-                                newSprite = col.gameObject.GetComponent<SpriteRenderer>().sprite;
-                            }
-                            // Kiểm tra xem biến đã tồn tại trong mảng chưa
-                            if (!spriteCheck.Contains(newSprite))
-                            {
-                                // Nếu không tồn tại, thêm vào cuối mảng
-                                spriteCheck = spriteCheck.Concat(new Sprite[] { newSprite }).ToArray();
+                            if(col.gameObject.transform.position.y < maxCeiling){
+                                Sprite newSprite = col.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+                                // Kiểm tra xem biến đã tồn tại trong mảng chưa
+                                if (!spriteCheck.Contains(newSprite))
+                                {
+                                    // Nếu không tồn tại, thêm vào cuối mảng
+                                    spriteCheck = spriteCheck.Concat(new Sprite[] { newSprite }).ToArray();
+                                }
                             }
                         }
                     }
@@ -184,16 +169,9 @@ public class ballBoom : MonoBehaviour
                 foreach (string tagToSearch in tagsToSearch)
                 {
                     foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag(tagToSearch)){
-                        if (spriteCheck.Contains(ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite)){
-                            // đổi màu
-                            ballMap.gameObject.GetComponent<SpriteRenderer>().sprite = ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
-                            ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
-                            ballMap.gameObject.tag = "boomMap";
-                        }
-                        if(ballMap.tag == "ballIce"){
-                            if (spriteCheck.Contains(ballMap.gameObject.GetComponent<SpriteRenderer>().sprite)){
+                        if(ballMap.gameObject.transform.position.y < maxCeiling){
+                            if (spriteCheck.Contains(ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite)){
                                 // đổi màu
-                                spriteIce = ballMap.gameObject.GetComponent<SpriteRenderer>().sprite;
                                 ballMap.gameObject.GetComponent<SpriteRenderer>().sprite = ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
                                 ballMap.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteBoom;
                                 ballMap.gameObject.tag = "boomMap";

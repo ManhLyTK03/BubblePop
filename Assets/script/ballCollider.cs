@@ -6,14 +6,10 @@ public class ballCollider : MonoBehaviour
 {
     public static bool isArrange = false; // Check va chạm
     public static bool daVacham = false; // Check va chạm công khai
-    // Start is called before the first frame update
-    void Start(){
-    }
     void OnTriggerEnter2D(Collider2D other){
         if(other.gameObject.tag == "ballFire" && !isArrange){
             other.transform.position = transform.position;
             isArrange = true;
-            fireBall.boolFire = false;
             // Kiểm tra xem GameObject đã có Rigidbody2D chưa
             Rigidbody2D rb2D = other.GetComponent<Rigidbody2D>();
             if (rb2D == null){
@@ -24,7 +20,7 @@ public class ballCollider : MonoBehaviour
             }
             daVacham = true;
             enabled = false;
-            creatBall.isCollider = true;
+            Invoke("setCreatBall", 0.3f);
             gameObject.SetActive(false);
             // Gọi hàm tắt script
             other.SendMessage("TurnOffScript");
@@ -35,15 +31,18 @@ public class ballCollider : MonoBehaviour
             string tag = other.gameObject.tag;
             buttonBoom.boolBoom = true;
             isArrange = true;
-            fireBall.boolFire = false;
-            gameObject.SetActive(false);
+            daVacham = true;
             ghiban.checkGhiban = true;
+            gameObject.SetActive(false);
             foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
                 Destroy(ballMap);
             }
-            creatBall.isCollider = true;
+            Invoke("setCreatBall", 0.3f);
             Destroy(other.gameObject);
             other.gameObject.tag = tag;
         }
+    }
+    void setCreatBall(){
+        creatBall.isCreat = true;
     }
 }

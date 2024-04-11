@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class fireBall : MonoBehaviour
 {
     public float ballSpeed = 12f; // Tốc độ của quả bóng
-    public static bool boolFire = false;    
+    public static bool boolFire;    
     private Vector3 direction;
     private float widthBall;
     public Vector3 mousePosition;
@@ -12,6 +12,7 @@ public class fireBall : MonoBehaviour
     private int pointLine;
 
     void Start(){
+        boolFire = false;
         // Lấy ra chiều rộng và chiều cao của màn hình
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
@@ -24,7 +25,7 @@ public class fireBall : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !boolFire) // Kiểm tra xem người dùng đã nhấn chuột trái chưa
         {
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
-            if(mousePosition.y > aimingLine.limitLine){
+            if(mousePosition.y > aimingLine.minLine && mousePosition.y < aimingLine.maxLine){
                 checkClickDown = true;
                 ballCollider.isArrange = false;
             }
@@ -33,7 +34,7 @@ public class fireBall : MonoBehaviour
         {
             checkClickDown = true;
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
-            if(mousePosition.y > aimingLine.limitLine){
+            if(mousePosition.y > aimingLine.minLine && mousePosition.y < aimingLine.maxLine){
                 boolFire = true;// bóng đã đc bắn đi
                 pointLine = 1;
             }

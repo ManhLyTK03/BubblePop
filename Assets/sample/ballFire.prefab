@@ -96,7 +96,6 @@ GameObject:
   - component: {fileID: 4426213192208657638}
   - component: {fileID: 2795806385005284683}
   - component: {fileID: 2438335973181607106}
-  - component: {fileID: 2057470281526938339}
   - component: {fileID: 6643266310848546804}
   - component: {fileID: 7705120551447207257}
   - component: {fileID: 994694752919816695}
@@ -205,23 +204,6 @@ MonoBehaviour:
   checkConnect: 1
   overlapRadius: 0
   tagsToSearch: []
---- !u!114 &2057470281526938339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4608967640174541184}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2635a3ea8f005fc4ca71334af886b6fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForceMin: 5
-  jumpForceMax: 7
-  jumpForce: 10
-  maxAngleVariation: 30
-  fadeDuration: 1
 --- !u!114 &6643266310848546804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,11 +221,6 @@ MonoBehaviour:
   ballRenderer: {fileID: 0}
   objectColor: 
   checkSoluong: 0
-  ballSprites:
-  - {fileID: 21300000, guid: be45d6a6b776d2a4e8b5d9b6448079e4, type: 3}
-  - {fileID: 21300000, guid: 2ac73f9c3dd9a1c4891d282bae293acc, type: 3}
-  - {fileID: 21300000, guid: a2b2e262f4172954592d4344b053a37d, type: 3}
-  ballDestroy: []
 --- !u!58 &7705120551447207257
 CircleCollider2D:
   m_ObjectHideFlags: 0

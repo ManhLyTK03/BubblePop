@@ -24,7 +24,7 @@ public class ballFall : MonoBehaviour
         isProcessed = true;
         checkConnect = 1;
         // Lấy tất cả các Collider2D nằm trong bán kính nhất định
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius*1.2f);
         // Duyệt qua từng Collider2D
         foreach (Collider2D collider in colliders){
             foreach (string tagToSearch in tagsToSearch){
@@ -33,7 +33,7 @@ public class ballFall : MonoBehaviour
                 }
             }
         }
-        Invoke("resetCheck", 0.1f);
+        Invoke("resetCheck", 0.01f);
     }
     void resetCheck(){
         isProcessed = false;

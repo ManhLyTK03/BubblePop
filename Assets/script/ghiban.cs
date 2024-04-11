@@ -17,9 +17,29 @@ public class ghiban : MonoBehaviour
         ballRenderer = GetComponent<SpriteRenderer>();
         // chiều rộng của bóng
         widthBall = ballRenderer.bounds.size.x;
-        overlapRadius = widthBall/2;
+        overlapRadius = (widthBall/2)*1.5f;
         // Lấy màu sắc của ball
         colorBall = transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+    }
+    public int _checkGhiban(){
+        // Lấy tất cả các Collider2D nằm trong bán kính nhất định
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
+        int soluong = 0;
+        // Duyệt qua từng Collider2D và in ra thông tin của GameObjects
+        foreach (Collider2D collider in colliders)
+        {
+            // Kiểm tra xem GameObject
+            if (collider.gameObject != gameObject && (collider.tag == "ballMap" || collider.tag == "ballIce")){
+                if(collider.gameObject.transform.position.y < ballBoom.maxCeiling){
+                    // Kiểm tra màu sắc của gameObject va chạm
+                    objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                    if (objectColor == colorBall){
+                        soluong++;
+                    }
+                }
+            }
+        }
+        return soluong;
     }
     public void _ghiban(bool check){
         if (isProcessed)
@@ -28,56 +48,33 @@ public class ghiban : MonoBehaviour
         // Đánh dấu là đã xử lý
         isProcessed = true;
 
-        // Lấy tất cả các Collider2D nằm trong bán kính nhất định
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
-        checkSoluong = 0;
         if(!check){
-            // Duyệt qua từng Collider2D và in ra thông tin của GameObjects
-            foreach (Collider2D collider in colliders)
-            {
-                // Kiểm tra xem GameObject
-                if (collider.gameObject != gameObject && (collider.tag == "ballMap" || collider.tag == "ballIce")){
-                    // Kiểm tra màu sắc của gameObject va chạm
-                    objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
-                    if (objectColor.EndsWith("Ice"))
-                    {
-                        // Nếu có, loại bỏ "Ice" từ phần tử
-                        objectColor = objectColor.Substring(0, objectColor.Length - 3);
-                    }
-                    if (objectColor == colorBall){
-                        checkSoluong++;
-                    }
-                }
-            }
+            checkSoluong = 0;
+            checkSoluong = _checkGhiban();
         }
+        
         if(checkSoluong >= 2){
             foreach (Collider2D collider in colliders){
                 // Kiểm tra xem GameObject
                 if (collider.gameObject != gameObject && (collider.tag == "ballMap" || collider.tag == "ballIce")){
-                    // Kiểm tra màu sắc của gameObject va chạm
-                    objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
-                    if (objectColor.EndsWith("Ice"))
-                    {
-                        // Nếu có, loại bỏ "Ice" từ phần tử
-                        objectColor = objectColor.Substring(0, objectColor.Length - 3);
-                    }
-                    if (colorBall.EndsWith("Ice"))
-                    {
-                        // Nếu có, loại bỏ "Ice" từ phần tử
-                        colorBall = colorBall.Substring(0, colorBall.Length - 3);
-                    }
-                    if (objectColor == colorBall){
-                        if(collider.gameObject.GetComponent<ghiban>().isProcessed){
-                            if(collider.tag == "ballIce"){
-                                SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { collider.gameObject }).ToArray();
-                                collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = collider.GetComponent<SpriteRenderer>().sprite;
+                    if(collider.gameObject.transform.position.y < ballBoom.maxCeiling){
+                        // Kiểm tra màu sắc của gameObject va chạm
+                        objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                        if (objectColor == colorBall){
+                            if(collider.gameObject.GetComponent<ghiban>().isProcessed){
+                                if(collider.tag == "ballIce"){
+                                    if (!SetPosition.ballIces.Contains(collider.gameObject)){
+                                        SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { collider.gameObject }).ToArray();
+                                    }
+                                }
+                                else{
+                                    Destroy(collider.gameObject);
+                                }
                             }
                             else{
-                                Destroy(collider.gameObject);
+                                collider.gameObject.GetComponent<ghiban>()._ghiban(true);
                             }
-                        }
-                        else{
-                            collider.gameObject.GetComponent<ghiban>()._ghiban(true);
                         }
                     }
                 }
@@ -88,40 +85,34 @@ public class ghiban : MonoBehaviour
                 foreach (Collider2D collider in colliders){
                     // Kiểm tra xem GameObject
                     if (collider.gameObject != gameObject && (collider.tag == "ballMap" || collider.tag == "ballIce")){
-                        // Kiểm tra màu sắc của gameObject va chạm
-                        objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
-                        if (objectColor.EndsWith("Ice"))
-                        {
-                            // Nếu có, loại bỏ "Ice" từ phần tử
-                            objectColor = objectColor.Substring(0, objectColor.Length - 3);
-                        }
-                        if (colorBall.EndsWith("Ice"))
-                        {
-                            // Nếu có, loại bỏ "Ice" từ phần tử
-                            colorBall = colorBall.Substring(0, colorBall.Length - 3);
-                        }
-                        if (objectColor == colorBall){
-                            if(collider.gameObject.GetComponent<ghiban>().isProcessed){
+                        if(collider.gameObject.transform.position.y < ballBoom.maxCeiling){
+                            // Kiểm tra màu sắc của gameObject va chạm
+                            objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                            if (objectColor == colorBall){
                                 if(collider.gameObject.GetComponent<ghiban>().isProcessed){
-                                    if(collider.tag == "ballIce"){
-                                        SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { collider.gameObject }).ToArray();
-                                        collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = collider.GetComponent<SpriteRenderer>().sprite;
-                                    }
-                                    else{
-                                        Destroy(collider.gameObject);
+                                    if(collider.gameObject.GetComponent<ghiban>().isProcessed){
+                                        if(collider.tag == "ballIce"){
+                                            if (!SetPosition.ballIces.Contains(collider.gameObject)){
+                                                SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { collider.gameObject }).ToArray();
+                                            }
+                                        }
+                                        else{
+                                            Destroy(collider.gameObject);
+                                        }
                                     }
                                 }
-                            }
-                            else{
-                                collider.gameObject.GetComponent<ghiban>()._ghiban(true);
+                                else{
+                                    collider.gameObject.GetComponent<ghiban>()._ghiban(true);
+                                }
                             }
                         }
                     }
                 }
                 if(gameObject.GetComponent<ghiban>().isProcessed){
                     if(gameObject.tag == "ballIce"){
-                        SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { gameObject }).ToArray();
-                        gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+                        if (!SetPosition.ballIces.Contains(gameObject)){
+                            SetPosition.ballIces = SetPosition.ballIces.Concat(new[] { gameObject }).ToArray();
+                        }
                     }
                     else{
                         Destroy(gameObject);
@@ -136,6 +127,8 @@ public class ghiban : MonoBehaviour
     void setBallIce(){
         foreach (GameObject ballIce in SetPosition.ballIces){
             ballIce.tag = "ballMap";
+            // Xóa phần tử con thứ hai
+            DestroyImmediate(ballIce.gameObject.transform.GetChild(1).gameObject);
         }
         SetPosition.ballIces = new GameObject[0];
     }

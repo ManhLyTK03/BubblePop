@@ -20,6 +20,7 @@ TagManager:
   - ballHole
   - ballIce
   - mapRD
+  - ballLai
   layers:
   - Default
   - TransparentFX

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 using System.Collections;
 
 public class ballJump : MonoBehaviour
@@ -9,30 +10,32 @@ public class ballJump : MonoBehaviour
     public float maxAngleVariation = 30f; // Biến thể góc tối đa
     private Rigidbody2D rb;
     public float fadeDuration = 1f; // Thời gian để hiệu ứng biến mất
-
-    void Start()
-    {
-        // Lấy ra collider của đối tượng hiện tại
-        Collider2D currentCollider = GetComponent<Collider2D>();
+    void Start(){
+        Invoke("setPosition", 0.01f);
     }
-
+    void setPosition(){
+        
+        // Lấy danh sách các BoxCollider2D trong GameObject này
+        BoxCollider2D[] colliders = GetComponents<BoxCollider2D>();
+        colliders[0].offset = new Vector2(-gameObject.transform.localScale.x/2, colliders[0].offset.y);
+        colliders[1].offset = new Vector2(gameObject.transform.localScale.x/2, colliders[0].offset.y);
+    }
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("ground")) // Kiểm tra va chạm với đối tượng được gán tag là "Ground"
+        if (collision.gameObject.CompareTag("ballFall") || collision.gameObject.CompareTag("ballMap"))
         {
-            rb = GetComponent<Rigidbody2D>();
-            // Lựa chọn một lực bật lên ngẫu nhiên cho quả bóng
-            float randomJumpForce = Random.Range(jumpForceMin, jumpForceMax);
-            // Tạo một góc bật lên ngẫu nhiên
-            float randomAngle = Random.Range(-maxAngleVariation, maxAngleVariation);
-            // Chuyển đổi góc thành vector hướng
-            Vector2 jumpDirection = Quaternion.Euler(0, 0, randomAngle) * Vector2.up;
-            // Áp dụng lực bật lên theo hướng này
-            rb.AddForce(jumpDirection * randomJumpForce, ForceMode2D.Impulse);
-            Invoke("destroyBall", 1f);
+            rb = collision.gameObject.GetComponent<Rigidbody2D>();
+
+            float ballBounciness = 0.2f; // hệ số đàn hồi
+
+            // Lấy vận tốc của quả bóng khi va chạm
+            Vector2 relativeVelocity = collision.relativeVelocity;
+
+            // Tính toán lực nảy dựa trên vận tốc và hệ số đàn hồi
+            Vector2 bounceForce = -relativeVelocity * ballBounciness;
+
+            // Áp dụng lực nảy lên quả bóng
+            rb.AddForce(bounceForce, ForceMode2D.Impulse);
         }
-    }
-    void destroyBall(){
-        Destroy(gameObject);
     }
 }

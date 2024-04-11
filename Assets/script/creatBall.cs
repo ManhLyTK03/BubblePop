@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class creatBall : MonoBehaviour
 {
-    public static bool isCollider = false;
+    public static bool isCreat = false;
     public GameObject ballFire; // Quả bóng mẫu bắn
     public Transform pointFire; // Điểm tạo bóng bắn
     public GameObject ballNext; // Quả bóng mẫu next
@@ -32,8 +32,8 @@ public class creatBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isCollider){
-            isCollider = false;
+        if(isCreat){
+            isCreat = false;
             Invoke("Destroy_Creat", 0.1f);
         }
     }

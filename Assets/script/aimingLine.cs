@@ -3,8 +3,11 @@ using UnityEngine;
 public class aimingLine : MonoBehaviour
 {
     public Transform startPoint;
+    public Transform wallTop;
+    public Transform Cannon;
     public LineRenderer lineRenderer;
-    public static float limitLine; // độ cao tối thiểu quả bóng đc bắn
+    public static float minLine; // độ cao tối thiểu quả bóng đc bắn
+    public static float maxLine; // độ cao tối thiểu quả bóng đc bắn
     public bool checkClick = false;
     public SpriteRenderer ballRenderer;
     public static Vector3[] pointHit;
@@ -20,7 +23,8 @@ public class aimingLine : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         startPoint = GetComponent<Transform>();
         widthBall = ballRenderer.bounds.size.x;
-        limitLine = startPoint.position.y + widthBall *1.5f;
+        minLine = startPoint.position.y + widthBall *1.5f;
+        maxLine = ballBoom.maxCeiling - widthBall/4f;
         ballRenderer = GetComponent<SpriteRenderer>();
         distanceX = widthBall/2;
         distanceY = widthBall/2*Mathf.Sqrt(3f);
@@ -38,7 +42,7 @@ public class aimingLine : MonoBehaviour
             // Thêm điểm bắt đầu vào mảng
             AddVectorToEnd(startPoint.position);
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
-            if(mousePosition.y > limitLine){
+            if(mousePosition.y > minLine && mousePosition.y < maxLine){
                 GameObject ballFireObject = GameObject.FindWithTag("ballFire");
                 string[] tags = { "ballLine", "ballBoom", "ballLaze", "ballRainbow"};
                 foreach (string tag in tags)
@@ -61,26 +65,31 @@ public class aimingLine : MonoBehaviour
 
                 // Tính toán vector hướng từ điểm bắt đầu đến vị trí chuột
                 direction = (mousePosition - startPoint.position).normalized;
+                // Sử dụng atan2 để tính toán góc quay trong đó gameObject cần quay
+                float angleCannon = -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
+
+                // Đặt Cannon theo hướng bắn
+                Cannon.rotation = Quaternion.AngleAxis(angleCannon, Vector3.forward);
                 
                 // Tạo một ray từ vị trí của đối tượng đến chuột
-                hit = Physics2D.Raycast(startPoint.position, direction,9999f); 
+                hit = Physics2D.CircleCast(startPoint.position,widthBall/2, direction); 
                     
                 lineRenderer.SetPosition(0, pointHit[0]);
                 if(ballFireObject.tag == "ballLine"){
                     lineRenderer.positionCount  = 2;
-                    AddVectorToEnd(hit.point);
+                    AddVectorToEnd(hit.centroid);
                     lineRenderer.SetPosition(1, pointHit[pointHit.Length - 1]);
                 }
                 else{
                     for (int i = 1;i<10;i++)
                     {
                         if(hit.collider != null){
-                            AddVectorToEnd(hit.point);
+                            AddVectorToEnd(hit.centroid);
                             lineRenderer.positionCount  = i+1;
                             lineRenderer.SetPosition(i, pointHit[i]);
                             if(hit.collider.tag == "vienMH"){
                                 direction = Vector2.Reflect(direction, hit.normal);
-                                hit = Physics2D.Raycast(pointHit[i], direction,9999f);
+                                hit = Physics2D.CircleCast(pointHit[i],widthBall/2, direction); 
                             }
                             else{
                                 break;
@@ -88,7 +97,7 @@ public class aimingLine : MonoBehaviour
                         }
                     }
                 }
-                if(hit.collider.tag == "ballMap" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap" || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce"){
+                if(hit.collider.tag == "ballMap" || hit.collider.tag == "ballLai" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap" || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce"){
                     // Tính vector hướng của đường thẳng
                     Vector2 direction = pointHit[pointHit.Length-1] - hit.collider.transform.position;
 
@@ -111,7 +120,7 @@ public class aimingLine : MonoBehaviour
                     }
                     // Kiểm tra xem có GameObject nào ở vị trí pointPosition có tag là "ball" không
                     Collider2D colliderCheckpoint = Physics2D.OverlapPoint(pointHit[pointHit.Length - 1]);
-                    if (colliderCheckpoint != null && (hit.collider.tag == "ballMap" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap" || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce" || colliderCheckpoint.CompareTag("vienMH")))
+                    if (colliderCheckpoint != null && (hit.collider.tag == "ballMap" || hit.collider.tag == "ballLai" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap" || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce" || colliderCheckpoint.CompareTag("vienMH")))
                     {
                         if(angle > 90f && angle <= 210f){
                             pointHit[pointHit.Length - 1] = new Vector3(hit.collider.transform.position.x - distanceX, hit.collider.transform.position.y - distanceY, transform.position.z);
@@ -141,7 +150,7 @@ public class aimingLine : MonoBehaviour
                     pointHit[pointHit.Length - 1] = new Vector3(positionBall,hit.collider.transform.position.y - widthBall/2,0f);
                     // Kiểm tra xem có GameObject nào ở vị trí pointPosition có tag là "ball" không
                     Collider2D colliderCheckpoint = Physics2D.OverlapPoint(pointHit[pointHit.Length - 1]);
-                    if (colliderCheckpoint != null && (hit.collider.tag == "ballMap" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap") || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce")
+                    if (colliderCheckpoint != null && (hit.collider.tag == "ballMap" || hit.collider.tag == "ballLai" || hit.collider.tag == "ballStone" || hit.collider.tag == "boomMap") || hit.collider.tag == "ballHole" || hit.collider.tag == "ballIce")
                     {
                         if(hit.point.x < pointHit[pointHit.Length - 1].x){
                             pointHit[pointHit.Length - 1].x = pointHit[pointHit.Length - 1].x - widthBall;
