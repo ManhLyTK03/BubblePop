@@ -16,9 +16,9 @@ public class ballJump : MonoBehaviour
     void setPosition(){
         
         // Lấy danh sách các BoxCollider2D trong GameObject này
-        BoxCollider2D[] colliders = GetComponents<BoxCollider2D>();
-        colliders[0].offset = new Vector2(-gameObject.transform.localScale.x/2, colliders[0].offset.y);
-        colliders[1].offset = new Vector2(gameObject.transform.localScale.x/2, colliders[0].offset.y);
+        CircleCollider2D[] colliders = GetComponents<CircleCollider2D>();
+        colliders[0].offset = new Vector2(-gameObject.transform.localScale.x/2, gameObject.transform.localScale.y/2);
+        colliders[1].offset = new Vector2(gameObject.transform.localScale.x/2, gameObject.transform.localScale.y/2);
     }
     void OnCollisionEnter2D(Collision2D collision)
     {

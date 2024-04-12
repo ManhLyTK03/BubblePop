@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class fireBall : MonoBehaviour
 {
-    public float ballSpeed = 12f; // Tốc độ của quả bóng
+    public float ballSpeed = 10f; // Tốc độ của quả bóng
     public static bool boolFire;    
     private Vector3 direction;
     private float widthBall;

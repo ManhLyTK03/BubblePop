@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2414611583873224907}
   - component: {fileID: 121290315977745157}
   - component: {fileID: 8782326961399631491}
-  - component: {fileID: 3978021215577715746}
+  - component: {fileID: 6526992186364184304}
   m_Layer: 0
   m_Name: ballBoom
   m_TagString: ballBoom
@@ -157,17 +157,18 @@ MonoBehaviour:
   ballRenderer: {fileID: 0}
   mousePosition: {x: 0, y: 0, z: 0}
   spriteBoom: {fileID: 21300000, guid: 0b9e9ffc187d5a44a82f9a9e3db4dc4c, type: 3}
+  spriteIce: {fileID: 0}
   clickFire: 0
   tagsToSearch: []
   tagsMap: []
---- !u!61 &3978021215577715746
+--- !u!61 &6526992186364184304
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 667526726390615243}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -203,7 +204,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.0001, y: 0.0001}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &7268647352970014937
 GameObject:

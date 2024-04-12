@@ -48,15 +48,19 @@ public class creatBall : MonoBehaviour
         // Lặp qua các quả bóng và lấy màu sắc của chúng
         foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("ballMap"))
         {
-            // Lấy component SpriteRenderer sprite name của quả bóng
-            string renderer = ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
-            if (renderer != null)
-            {
-                string color = renderer;
-                // Kiểm tra xem màu sắc đã tồn tại trong HashSet chưa
-                if (!uniqueColors.Contains(color))
+            if(ballMap.transform.position.y < ballBoom.maxCeiling){
+                // Lấy component SpriteRenderer sprite name của quả bóng
+                string renderer = ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                if (renderer != null)
                 {
-                    // Nếu màu sắc chưa tồn tại, thêm vào mảng và HashSet
+                    string color = renderer;
+                    // // Kiểm tra xem màu sắc đã tồn tại trong HashSet chưa
+                    // if (!uniqueColors.Contains(color))
+                    // {
+                    //     // Nếu màu sắc chưa tồn tại, thêm vào mảng và HashSet
+                    //     uniqueColors.Add(color);
+                    //     AddBallColor(color);
+                    // }
                     uniqueColors.Add(color);
                     AddBallColor(color);
                 }
@@ -64,22 +68,25 @@ public class creatBall : MonoBehaviour
         }
         foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("ballIce"))
         {
-            // Lấy component SpriteRenderer sprite name của quả bóng
-            string renderer = ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
-            
-            // Kiểm tra xem phần tử hiện tại có kết thúc bằng "Ice" không
-            if (renderer.EndsWith("Ice"))
-            {
-                // Nếu có, loại bỏ "Ice" từ phần tử
-                renderer = renderer.Substring(0, renderer.Length - 3);
-            }
-            if (renderer != null)
-            {
-                string color = renderer;
-                // Kiểm tra xem màu sắc đã tồn tại trong HashSet chưa
-                if (!uniqueColors.Contains(color))
+            if(ballMap.transform.position.y < ballBoom.maxCeiling){
+                // Lấy component SpriteRenderer sprite name của quả bóng
+                string renderer = ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
+                // Kiểm tra xem phần tử hiện tại có kết thúc bằng "Ice" không
+                if (renderer.EndsWith("Ice"))
                 {
-                    // Nếu màu sắc chưa tồn tại, thêm vào mảng và HashSet
+                    // Nếu có, loại bỏ "Ice" từ phần tử
+                    renderer = renderer.Substring(0, renderer.Length - 3);
+                }
+                if (renderer != null)
+                {
+                    string color = renderer;
+                    // // Kiểm tra xem màu sắc đã tồn tại trong HashSet chưa
+                    // if (!uniqueColors.Contains(color))
+                    // {
+                    //     // Nếu màu sắc chưa tồn tại, thêm vào mảng và HashSet
+                    //     uniqueColors.Add(color);
+                    //     AddBallColor(color);
+                    // }
                     uniqueColors.Add(color);
                     AddBallColor(color);
                 }
