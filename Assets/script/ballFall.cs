@@ -48,7 +48,11 @@ public class ballFall : MonoBehaviour
                     ball.tag = "ballFall";
                     // Tắt collider trigger
                     ball.GetComponent<Collider2D>().isTrigger = false;
-                    ball.GetComponent<Rigidbody2D>().gravityScale = 1f;
+                    ball.layer = LayerMask.NameToLayer("ballFall");
+                    Rigidbody2D ballRB = ball.GetComponent<Rigidbody2D>();
+                    ballRB.gravityScale = 1f;
+                    // Gán vận tốc và hướng rơi ban đầu cho quả bóng
+                    ballRB.velocity = new Vector2(Random.Range(-1f,1f),Random.Range(0f,1f)).normalized * Random.Range(0f,2f);
                 }
             }
         }

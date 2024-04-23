@@ -54,13 +54,6 @@ public class creatBall : MonoBehaviour
                 if (renderer != null)
                 {
                     string color = renderer;
-                    // // Kiểm tra xem màu sắc đã tồn tại trong HashSet chưa
-                    // if (!uniqueColors.Contains(color))
-                    // {
-                    //     // Nếu màu sắc chưa tồn tại, thêm vào mảng và HashSet
-                    //     uniqueColors.Add(color);
-                    //     AddBallColor(color);
-                    // }
                     uniqueColors.Add(color);
                     AddBallColor(color);
                 }
@@ -80,13 +73,6 @@ public class creatBall : MonoBehaviour
                 if (renderer != null)
                 {
                     string color = renderer;
-                    // // Kiểm tra xem màu sắc đã tồn tại trong HashSet chưa
-                    // if (!uniqueColors.Contains(color))
-                    // {
-                    //     // Nếu màu sắc chưa tồn tại, thêm vào mảng và HashSet
-                    //     uniqueColors.Add(color);
-                    //     AddBallColor(color);
-                    // }
                     uniqueColors.Add(color);
                     AddBallColor(color);
                 }

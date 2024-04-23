@@ -12,7 +12,7 @@ public class swapBall : MonoBehaviour
         // chiều rộng của bóng
         widthBall = ballRenderer.bounds.size.x;
         button = GetComponent<Button>();
-        Invoke("buttonPosition", 0.1f);
+        Invoke("buttonPosition", 0.2f);
     }
     void Update()
     {

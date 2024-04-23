@@ -18,6 +18,7 @@ public class ballCollider : MonoBehaviour
                 rb2D.gravityScale = 0f;
                 other.gameObject.GetComponent<Collider2D>().isTrigger = true;
             }
+            SetPosition.ballDestroys.Clear();
             daVacham = true;
             enabled = false;
             Invoke("setCreatBall", 0.3f);
@@ -31,7 +32,7 @@ public class ballCollider : MonoBehaviour
             string tag = other.gameObject.tag;
             buttonBoom.boolBoom = true;
             isArrange = true;
-            daVacham = true;
+            SetPosition.ballDestroys.Clear();
             ghiban.checkGhiban = true;
             gameObject.SetActive(false);
             foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){

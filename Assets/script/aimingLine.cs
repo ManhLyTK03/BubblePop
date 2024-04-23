@@ -187,6 +187,8 @@ public class aimingLine : MonoBehaviour
                 return Color.green;
             case "ballYellow":
                 return Color.yellow;
+            case "ballViolet":
+                return Color.magenta;
             // Thêm các màu khác nếu cần
             default:
                 return Color.white; // Màu mặc định

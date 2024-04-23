@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CheckCollider : MonoBehaviour
 {
@@ -22,7 +23,6 @@ public class CheckCollider : MonoBehaviour
             colorBall = transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
             // Lấy tất cả các Collider2D nằm trong bán kính nhất định
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, overlapRadius);
-
             // Duyệt qua từng Collider2D và in ra thông tin của GameObjects
             foreach (Collider2D collider in colliders)
             {
@@ -33,11 +33,37 @@ public class CheckCollider : MonoBehaviour
                     // Kiểm tra màu sắc của gameObject va chạm
                     string objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
                     if (objectColor == colorBall){
-                        collider.gameObject.GetComponent<ghiban>()._ghiban(false);
+                        collider.gameObject.GetComponent<ghiban>()._ghiban();
                     }
                 }
             }
             enabled = false;
+            Invoke("checkDestroy", 0.1f);
         }
+    }
+    void checkDestroy(){
+        if(SetPosition.ballDestroys.Count >= 3){
+            _Destroy();
+        }
+        else{
+            ghiban.checkGhiban = true;
+            SetPosition.ballDestroys.Clear();
+        }
+    }
+    void _Destroy(){
+        while (SetPosition.ballDestroys.Count > 0)
+        {
+            if(SetPosition.ballDestroys[0].tag == "ballIce"){
+                GameObject ballIceDestroy = SetPosition.ballDestroys[0].transform.GetChild(1).gameObject;
+                Destroy(ballIceDestroy);
+                SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
+            }
+            else{
+                Destroy(SetPosition.ballDestroys[0]); // Hủy GameObject trước
+                SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
+            }
+        }
+        SetPosition.ballDestroys.Clear();
+        ghiban.checkGhiban = true;
     }
 }
