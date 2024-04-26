@@ -35,7 +35,10 @@ public class ballCollider : MonoBehaviour
             SetPosition.ballDestroys.Clear();
             ghiban.checkGhiban = true;
             gameObject.SetActive(false);
-            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("boomMap")){
+            GameObject[] ballMaps = GameObject.FindGameObjectsWithTag("boomMap");
+            Score.intCombo += 1;
+            Score.intScore += ballMaps.Length*10*Score.intCombo;
+            foreach (GameObject ballMap in ballMaps){
                 Destroy(ballMap);
             }
             Invoke("setCreatBall", 0.3f);

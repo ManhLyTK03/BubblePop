@@ -1,17 +1,15 @@
 using UnityEngine;
 
-public class scrollMap : MonoBehaviour
+public class scrollListLever : MonoBehaviour
 {
     private bool isMouseDown = false;
     private Vector3 mOffset;
-    public Vector3 macDinh;
-    void Start(){
-        macDinh = transform.position;
-    }
+    public float scrollSpeed = 0.1f; // Tốc độ cuộn
+
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && creatBallMap.boolScroll)
+        if (Input.GetMouseButtonDown(0))
         {
             isMouseDown = true;
             mOffset = gameObject.transform.position - GetMouseWorldPos();
@@ -19,9 +17,9 @@ public class scrollMap : MonoBehaviour
 
         if (isMouseDown && Input.GetMouseButton(0))
         {
-            if(macDinh.y > GetMouseWorldPos().y + mOffset.y){
-                transform.position = new Vector3(transform.position.x, GetMouseWorldPos().y + mOffset.y, transform.position.z);
-            }
+            Vector3 newPos = new Vector3(transform.position.x, GetMouseWorldPos().y + mOffset.y, transform.position.z);
+            // Làm mềm di chuyển để tạo hiệu ứng liên tục
+            transform.position = Vector3.Lerp(transform.position, newPos, scrollSpeed);
         }
 
         if (Input.GetMouseButtonUp(0))

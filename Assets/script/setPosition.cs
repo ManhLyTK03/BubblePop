@@ -5,9 +5,11 @@ using UnityEngine;
 public class SetPosition : MonoBehaviour
 {
     public Transform[] groundHoles;
-    public Transform wallLeft, wallRight, wallCeiling;
+    public Transform[] binhHoas;
+    public Transform wallLeft, wallRight, wallCeiling, seilingBottom;
     public SpriteRenderer ballRenderer;
     public static GameObject[] ballIces;
+    public float dBottom ;
     // Mảng để lưu trữ các GameObject
     public static List<GameObject> ballDestroys = new List<GameObject>();
 
@@ -18,7 +20,7 @@ public class SetPosition : MonoBehaviour
         ballIces = new GameObject[0];
         // chiều rộng của bóng
         float widthBall = ballRenderer.bounds.size.x;
-
+        dBottom = 1f;
         // Cập nhật kích thước của wallLeft
         wallLeft.localScale = new Vector3(widthBall, wallLeft.localScale.y, wallLeft.localScale.z);
         float leftEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
@@ -33,13 +35,21 @@ public class SetPosition : MonoBehaviour
         ballBoom.maxCeiling = wallCeiling.position.y - wallCeiling.localScale.y/2 + widthBall/2;
         // Cập nhật kích thước của wallBottom
         float bottomEdgeY = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
-        // wallBottom.position = new Vector3(wallBottom.position.x, bottomEdgeY, wallBottom.position.z);
+        seilingBottom.position = new Vector3(0, bottomEdgeY + seilingBottom.localScale.y/2f,0f);
+        dBottom = seilingBottom.position.y + seilingBottom.localScale.y/2f;
         int i = 0 ;
         float screenWidth = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x * 2;
         // Dùng vòng lặp để điều chỉnh offset của từng BoxCollider2D
         foreach (Transform groundHole in groundHoles)
         {
-            groundHole.position = new Vector3(leftEdgeX + i*screenWidth/5f, bottomEdgeY + 0.5f, groundHole.position.z);
+            groundHole.position = new Vector3(leftEdgeX + i*screenWidth/5f, dBottom, groundHole.position.z);
+            i++;
+        }
+        i = 0;
+        foreach (Transform binhHoa in binhHoas)
+        {
+            binhHoa.localScale = new Vector3(screenWidth/5f,binhHoa.localScale.y, 0);
+            binhHoa.position = new Vector3(leftEdgeX + i*screenWidth/5f + binhHoa.localScale.x/2f, dBottom - binhHoa.localScale.y/4f, binhHoa.position.z);
             i++;
         }
     }

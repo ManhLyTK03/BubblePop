@@ -36,7 +36,7 @@ public class creatBallMap : MonoBehaviour
                 foreach (Collider2D collider in colliders)
                 {
                     if(collider.tag == "ballMap" || collider.tag == "ballCreat"){
-                        if(tagBall == "ballStone" || tagBall == "ballHole"|| tagBall == "ballMap"){
+                        if((tagBall == "ballStone" || tagBall == "ballHole"|| tagBall == "ballMap") && collider.tag == "ballMap"){
                             Vector3 mapPosition = collider.gameObject.transform.position;
                             mapPosition.z -= 1;
                             AddGameObjectOld(collider.gameObject);
@@ -44,10 +44,15 @@ public class creatBallMap : MonoBehaviour
                             GameObject newBallMap = Instantiate(ballMap, mapPosition, Quaternion.identity); // tạo bóng
                             newBallMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteCreat; // gán img
                             newBallMap.transform.parent = transform;
-                            newBallMap.tag = "ballFall";
+                            if(tagBall == "ballMap"){
+                                newBallMap.tag = "ballFall";
+                            }
+                            else{
+                                newBallMap.tag = "ballCreat";
+                            }
                             AddGameObject(newBallMap);
                         }
-                        if(tagBall == "ballIce"){
+                        if(tagBall == "ballIce" && collider.tag == "ballMap"){
                             Vector3 mapPosition = collider.gameObject.transform.position;
                             mapPosition.z -= 1;
                             Sprite spriteRandom = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
@@ -62,7 +67,7 @@ public class creatBallMap : MonoBehaviour
                             newBallIce.transform.localScale = new Vector3(1,1,1);
                             AddGameObject(newBallMap);
                         }
-                        if(tagBall == "ballFall"){
+                        if(tagBall == "ground"){
                             AddGameObjectOld(collider.gameObject);
                             collider.gameObject.SetActive(false);
                             Vector3 mapPosition = collider.gameObject.transform.position;
@@ -80,7 +85,7 @@ public class creatBallMap : MonoBehaviour
             boolCreat = false;
             foreach (GameObject ball in GameObject.FindGameObjectsWithTag("ballFall"))
             {
-                ball.tag = "ballCreat";
+                ball.tag = "ballMap";
             }
         }
     }
@@ -148,7 +153,7 @@ public class creatBallMap : MonoBehaviour
                 checkClick = 4;
             }
         }
-        tagBall = "ballFall";
+        tagBall = "ground";
     }
     public void _clickBlue(){
         if(boolScroll){

@@ -16,16 +16,11 @@ public class mapRandom : MonoBehaviour
     public GameObject ballMap;
     public GameObject ballIce;
     public Sprite[] ballColors;
-    public Sprite[] spriteLai;
-    private Dictionary<string, Sprite> spriteDictionary = new Dictionary<string, Sprite>(); // Dictionary để ánh xạ tên và Sprite tương ứng
-    public int intStone,intIce,intHole,intLai;
     public Sprite spriteStone,spriteHole;
     public static bool checkWin = false;
-    public float leftEdgeX;
-    public string[] tagsToSearch; // Mảng các tag cần tìm
+    public float leftEdgeX,rightEdgeX;
     public Vector3[] mapPositions;
     public static int[] typeMap;
-    public SpriteRenderer spriteRenderer;
     private float widthMap;
     public Vector3 targetMap;
     public float speedMap = 5.0f;
@@ -33,25 +28,18 @@ public class mapRandom : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        col = typeMap.Length / (row + 1);
-        // Điền thông tin từ mảng vào Dictionary
-        foreach (Sprite sprite in ballColors)
-        {
-            spriteDictionary.Add(sprite.name, sprite);
-        }
+        col = checkCol(typeMap.Length);
         leftEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;// Lấy tọa độ x của cạnh trái (left) của màn hình
+        rightEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
         widthBall = ballSR.bounds.size.x; // Lấy độ rộng của SpriteRenderer
         overlapRadius = (widthBall/2)*1.5f;
-        widthMap = widthBall + (widthBall/2)*Mathf.Sqrt(3f)*col;
         // Cập nhật vị trí của wallTop
-        wallTop.localScale = new Vector3(wallTop.localScale.x, widthBall/2, wallTop.localScale.z);
-        wallTop.position = new Vector3(wallTop.transform.position.x, widthMap, wallTop.transform.position.z);
-        wallTopImg.position = new Vector3(wallTopImg.transform.position.x, widthMap + wallTopImg.localScale.y, wallTopImg.transform.position.z);
-            Invoke("creatMap", 0.05f);
+        creatMap();
     }
     void Update(){
         if(checkWin){
-            Restart();
+            checkWin = false;
+            loadWin();
         }
         if(ghiban.checkGhiban){
             Invoke("setMapPosition", 0.1f);
@@ -63,16 +51,33 @@ public class mapRandom : MonoBehaviour
             }
         }
     }
+    void loadWin(){
+        int lever = PlayerPrefs.GetInt("lever", 1);
+        lever++;
+        // Lưu giá trị mới của lever vào PlayerPrefs
+        PlayerPrefs.SetInt("lever", lever);
+        // Gọi Save() để lưu thay đổi xuống ổ đĩa
+        PlayerPrefs.Save();
+        Invoke("Home", 0.1f);
+    }
     public void Restart(){
         SceneManager.LoadScene("mainPlay");
     }
+    public void Home(){
+        SceneManager.LoadScene("mainMenu");
+    }
     public void EditMap(){
+        randomMapedit.col = col;
         randomMapedit.boolRandomMap = true;
-        SceneManager.LoadScene("CreatMap");
+        SceneManager.LoadScene("CreateMap");
     }
     void creatMap(){
         checkWin = false;
         mapPositions = new Vector3[0];
+        widthMap = widthBall + (widthBall/2)*Mathf.Sqrt(3f)*col;
+        wallTop.localScale = new Vector3(wallTop.localScale.x, widthBall/2, wallTop.localScale.z);
+        wallTop.position = new Vector3(wallTop.transform.position.x, widthMap, wallTop.transform.position.z);
+        wallTopImg.position = new Vector3(wallTopImg.transform.position.x, widthMap + wallTopImg.localScale.y, wallTopImg.transform.position.z);
         for (int i = 0; i <= col ; i++)
         {
             for (int j = 0; j <= row + ((i+1)%2)-1; j++)
@@ -102,6 +107,9 @@ public class mapRandom : MonoBehaviour
             if(typeMap[i] == 12){
                 spriteRandom = spriteHole;
             }
+            if(typeMap[i] == 10){
+                spriteRandom = null;
+            }
             if(spriteRandom != null){
                 GameObject newBallMap = Instantiate(ballMap, mapPositions[i], Quaternion.identity); // tạo bóng
                 newBallMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteRandom; // gán img
@@ -120,6 +128,10 @@ public class mapRandom : MonoBehaviour
                     newBallMap.tag = "ballHole";
                 }
             }
+            else{
+                GameObject newBallMap = new GameObject("NewBallMap"); // Tạo một GameObject mới với tên là "NewBallMap"
+                newBallMap.transform.position = mapPositions[i]; // Đặt vị trí của GameObject mới
+            }
         }
     }
     void setMapPosition(){
@@ -137,5 +149,21 @@ public class mapRandom : MonoBehaviour
         {
             targetMap = new Vector3(transform.position.x, transform.position.y - (minObject.transform.position.y - widthBall / 2), transform.position.z);
         }
+    }
+    int checkCol(int sumBall){
+        int checkRow = 10;
+        for(int i = 0; i <= 100; i++){
+            if(i%2==0){
+                checkRow = 11;
+            }
+            else{
+                checkRow = 10;
+            }
+            sumBall -= checkRow;
+            if(sumBall == 0){
+                return i;
+            }
+        }
+        return sumBall;
     }
 }

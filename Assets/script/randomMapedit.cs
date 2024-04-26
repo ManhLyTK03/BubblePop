@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.UI;
 
 
 public class randomMapedit : MonoBehaviour
@@ -10,7 +11,7 @@ public class randomMapedit : MonoBehaviour
     public static bool boolRandomMap = false;
     public SpriteRenderer ballSR;
     public float widthBall;
-    public int col;
+    public static int col;
     public int row = 10;
     public GameObject ballMap;
     public GameObject ballIce;
@@ -18,11 +19,31 @@ public class randomMapedit : MonoBehaviour
     public Sprite spriteStone,spriteHole;
     public float leftEdgeX;
     public Vector3[] mapPositions;
+    public InputField inputField;
     // Start is called before the first frame update
     void Start()
     {
         widthBall = ballSR.bounds.size.x; // Lấy độ rộng của SpriteRenderer
-        Invoke("creatMap", 0.1f);
+        // Đăng ký sự kiện EndEdit
+        if(boolRandomMap){
+            leftEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;// Lấy tọa độ x của cạnh trái (left) của màn hình
+            inputField.gameObject.SetActive(false);
+            continueMap();
+        }
+        else{
+            inputField.onEndEdit.AddListener(OnEndEdit);
+        }
+    }
+
+    void OnEndEdit(string text)
+    {
+        // Kiểm tra xem người dùng đã nhập xong hay chưa
+        if (!string.IsNullOrEmpty(text))
+        {
+            col = int.Parse(inputField.text);
+            inputField.gameObject.SetActive(false);
+            creatMap();
+        }
     }
     void creatMap(){
         leftEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;// Lấy tọa độ x của cạnh trái (left) của màn hình
@@ -33,6 +54,7 @@ public class randomMapedit : MonoBehaviour
         else{
             continueMap();
         }
+        boolRandomMap = false;
     }
     void creatMapRanDom(){
         for (int i = 0; i <= col ; i++)
@@ -98,5 +120,8 @@ public class randomMapedit : MonoBehaviour
                 }
             }
         }
+    }
+    public void Restart(){
+        SceneManager.LoadScene("CreateMap");
     }
 }

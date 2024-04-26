@@ -22,69 +22,33 @@ public class LevelManager : MonoBehaviour
         _checkMap();
         // Tạo chuỗi dữ liệu từ mảng 2 chiều
         string data = "";
-        for (int i = 0; i < levelData.GetLength(0); i++)
+        for (int i = 0; i <= newMap.Length - 1; i++)
         {
-            for (int j = 0; j < levelData.GetLength(1); j++)
-            {
-                data += levelData[i, j];
-                if (j < levelData.GetLength(1) - 1)
-                    data += ",";
+            data += newMap[i];
+            Debug.Log(newMap[i]);
+            if (i != newMap.Length - 1){
+                data += ",";
             }
-            if (i < levelData.GetLength(0) - 1)
-                data += "\n"; // Thêm ký tự xuống dòng giữa các hàng
         }
 
-        // Ghi dữ liệu vào file
-        File.WriteAllText(path, data);
+        // Mở file để ghi, sử dụng StreamWriter với append = true
+        using (StreamWriter writer = new StreamWriter(path, true))
+        {
+            // Ghi dữ liệu vào cuối file
+            writer.WriteLine(data);
+        }
     }
     void LoadLevelData()
     {
         path = Path.Combine(Application.persistentDataPath, "saveMap.txt");
 
-        if (File.Exists(path))
+        if (!File.Exists(path))
         {
-            string data = File.ReadAllText(path);
-            string[] rows = data.Split('\n');
+            path = Path.Combine(Application.persistentDataPath, "saveMap.txt");
 
-            // Tách dữ liệu và gán cho mảng 2 chiều
-            levelData = new int[rows.Length, rows[0].Split(',').Length];
-            for (int i = 0; i < rows.Length; i++)
-            {
-                string[] rowData = rows[i].Split(',');
-                for (int j = 0; j < rowData.Length; j++)
-                {
-                    levelData[i, j] = int.Parse(rowData[j]);
-                }
-            }
-        }
-        else
-        {
-            string path = Path.Combine(Application.persistentDataPath, "saveMap.txt");
-        }
-
-        if (File.Exists(path))
-        {
-            string data = File.ReadAllText(path);
-            string[] rows = data.Split('\n');
-
-            // Tách dữ liệu và gán cho mảng 2 chiều
-            levelData = new int[rows.Length, rows[0].Split(',').Length];
-            for (int i = 0; i < rows.Length; i++)
-            {
-                string[] rowData = rows[i].Split(',');
-                for (int j = 0; j < rowData.Length; j++)
-                {
-                    levelData[i, j] = int.Parse(rowData[j]);
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError("No level data file found!");
         }
     }
     public void _checkMap(){
-        levelData = new int[0,0];
         newMap = new int[0];
         LoadLevelData();
         foreach (GameObject ballFallObject in GameObject.FindGameObjectsWithTag("ballCreat"))
@@ -134,32 +98,11 @@ public class LevelManager : MonoBehaviour
             }
             else{
                 if(ballMaps[i].name == "NewBallMap"){
-                    typeBall = 0;
+                    typeBall = 10;
                 }
             }
             AddElement(typeBall);
         }
-        
-        int[] newArray = newMap;
-        // Tạo một mảng mới có kích thước lớn hơn một hàng so với mảng ban đầu
-        int[,] newLevelData = new int[levelData.GetLength(0) + 1, newArray.Length];
-        // Sao chép dữ liệu từ mảng ban đầu vào mảng mới
-        for (int i = 0; i < levelData.GetLength(0); i++)
-        {
-            for (int j = 0; j < levelData.GetLength(1); j++)
-            {
-                newLevelData[i, j] = levelData[i, j];
-            }
-        }
-
-        // Thêm mảng mới vào cuối mảng
-        for (int j = 0; j < newArray.Length; j++)
-        {
-            newLevelData[levelData.GetLength(0), j] = newArray[j];
-        }
-
-        // Gán mảng mới vào mảng cũ
-        levelData = newLevelData;
     }
     private int CompareGameObjects(GameObject obj1, GameObject obj2)
     {
@@ -193,12 +136,7 @@ public class LevelManager : MonoBehaviour
         newMap = tempArray;
     }
     public void tryMap(){
-        mapRandom.typeMap = new int[levelData.GetLength(1)];
-        for (int j = 0; j < levelData.GetLength(1); j++)
-        {
-            mapRandom.typeMap[j] = levelData[levelData.GetLength(0) - 1, j];
-        }
+        mapRandom.typeMap = newMap;
         SceneManager.LoadScene("mainPlay");
     }
 }
-

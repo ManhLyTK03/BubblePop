@@ -43,10 +43,13 @@ public class CheckCollider : MonoBehaviour
     }
     void checkDestroy(){
         if(SetPosition.ballDestroys.Count >= 3){
+            Score.intCombo += 1;
+            Score.intScore += (SetPosition.ballDestroys.Count-1)*10*Score.intCombo;
             _Destroy();
         }
         else{
             ghiban.checkGhiban = true;
+            Score.intCombo = 0;
             SetPosition.ballDestroys.Clear();
         }
     }
@@ -54,6 +57,7 @@ public class CheckCollider : MonoBehaviour
         while (SetPosition.ballDestroys.Count > 0)
         {
             if(SetPosition.ballDestroys[0].tag == "ballIce"){
+                SetPosition.ballDestroys[0].tag = "ballMap";
                 GameObject ballIceDestroy = SetPosition.ballDestroys[0].transform.GetChild(1).gameObject;
                 Destroy(ballIceDestroy);
                 SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
