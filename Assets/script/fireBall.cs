@@ -36,6 +36,7 @@ public class fireBall : MonoBehaviour
             mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // Lấy vị trí của chuột trong không gian thế giới
             if(mousePosition.y > aimingLine.minLine && mousePosition.y < aimingLine.maxLine){
                 boolFire = true;// bóng đã đc bắn đi
+                lostGame.intMaxBall -= 1;
                 pointLine = 1;
             }
         }

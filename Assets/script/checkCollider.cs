@@ -43,7 +43,9 @@ public class CheckCollider : MonoBehaviour
     }
     void checkDestroy(){
         if(SetPosition.ballDestroys.Count >= 3){
-            Score.intCombo += 1;
+            if(Score.intCombo < 5){
+                Score.intCombo += 1;
+            }
             Score.intScore += (SetPosition.ballDestroys.Count-1)*10*Score.intCombo;
             _Destroy();
         }

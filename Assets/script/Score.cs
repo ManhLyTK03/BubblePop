@@ -6,6 +6,7 @@ public class Score : MonoBehaviour
     public static int intScore = 0;
     public static int intCombo = 0;
     private Text scoreText;
+    private int score = 0;
 
     void Start()
     {
@@ -16,6 +17,9 @@ public class Score : MonoBehaviour
 
     void Update()
     {
-        scoreText.text = intScore.ToString();
+        if(score != intScore){
+            score = intScore;
+            scoreText.text = intScore + " " + intCombo;
+        }
     }
 }

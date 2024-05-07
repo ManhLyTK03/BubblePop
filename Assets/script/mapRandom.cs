@@ -11,13 +11,12 @@ public class mapRandom : MonoBehaviour
     public float widthBall;
     public Transform wallTop;
     public Transform wallTopImg;
-    public int col;
+    public static int col;
     public int row = 10;
     public GameObject ballMap;
     public GameObject ballIce;
     public Sprite[] ballColors;
     public Sprite spriteStone,spriteHole;
-    public static bool checkWin = false;
     public float leftEdgeX,rightEdgeX;
     public Vector3[] mapPositions;
     public static int[] typeMap;
@@ -29,6 +28,7 @@ public class mapRandom : MonoBehaviour
     void Start()
     {
         col = checkCol(typeMap.Length);
+        lostGame.intMaxBall = col + 10;
         leftEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;// Lấy tọa độ x của cạnh trái (left) của màn hình
         rightEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
         widthBall = ballSR.bounds.size.x; // Lấy độ rộng của SpriteRenderer
@@ -37,10 +37,6 @@ public class mapRandom : MonoBehaviour
         creatMap();
     }
     void Update(){
-        if(checkWin){
-            checkWin = false;
-            loadWin();
-        }
         if(ghiban.checkGhiban){
             Invoke("setMapPosition", 0.1f);
         }
@@ -50,15 +46,6 @@ public class mapRandom : MonoBehaviour
                 transform.position = Vector3.Lerp(transform.position, targetMap, speedMap * Time.deltaTime);
             }
         }
-    }
-    void loadWin(){
-        int lever = PlayerPrefs.GetInt("lever", 1);
-        lever++;
-        // Lưu giá trị mới của lever vào PlayerPrefs
-        PlayerPrefs.SetInt("lever", lever);
-        // Gọi Save() để lưu thay đổi xuống ổ đĩa
-        PlayerPrefs.Save();
-        Invoke("Home", 0.1f);
     }
     public void Restart(){
         SceneManager.LoadScene("mainPlay");
@@ -72,7 +59,6 @@ public class mapRandom : MonoBehaviour
         SceneManager.LoadScene("CreateMap");
     }
     void creatMap(){
-        checkWin = false;
         mapPositions = new Vector3[0];
         widthMap = widthBall + (widthBall/2)*Mathf.Sqrt(3f)*col;
         wallTop.localScale = new Vector3(wallTop.localScale.x, widthBall/2, wallTop.localScale.z);

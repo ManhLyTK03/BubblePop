@@ -16,10 +16,4 @@ public class setCam : MonoBehaviour
         mainCamera = Camera.main;
         mainCamera.orthographicSize = (widthBall * Screen.height / Screen.width * 0.5f) * row;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

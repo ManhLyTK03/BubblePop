@@ -6,6 +6,7 @@ public class creatAnchor : MonoBehaviour
 {
     private BoxCollider2D boxCollider;
     public string[] tagsToSearch; // Mảng các tag cần tìm
+    public static List<GameObject> ballAnchor = new List<GameObject>();
     void Start(){
         // Lấy BoxCollider2D từ GameObject hiện tại
         boxCollider = GetComponent<BoxCollider2D>();
@@ -47,7 +48,7 @@ public class creatAnchor : MonoBehaviour
             }
         }
         if(boolWin){
-            mapRandom.checkWin = true;
+            lostGame.checkWin = true;
         }
     }
 }

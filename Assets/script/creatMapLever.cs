@@ -61,10 +61,10 @@ public class creatMapLever : MonoBehaviour
             TopY = buttonLeverNew;
             buttonLeverNew.transform.parent = transform;
             buttonLeverNew.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-            if(pointTop.x >= maxWall){
+            if(pointTop.x > 0.5f){
                 topX = -maxWall;
             }
-            else if(pointTop.x <= -maxWall){
+            else if(pointTop.x <= -0.5f){
                 topX = maxWall;
             }
         }
@@ -79,10 +79,10 @@ public class creatMapLever : MonoBehaviour
             BottomY = buttonLeverNew;
             buttonLeverNew.transform.parent = transform;
             buttonLeverNew.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-            if(pointBottom.x >= maxWall){
+            if(pointBottom.x >= 0.5f){
                 bottomX = -maxWall;
             }
-            else if(pointBottom.x <= -maxWall){
+            else if(pointBottom.x <= -0.5f){
                 bottomX = maxWall;
             }
         }

@@ -139,7 +139,8 @@ public class aimingLine : MonoBehaviour
                 if(hit.collider.tag  == "wallTop"){
                     float min = widthBall/2f;
                     float positionBall = 0f;
-                    for (float i = leftEdgeX + widthBall;i<=widthBall*11; i += widthBall)
+                    float pointTop = leftEdgeX + (mapRandom.col%2+1)*widthBall/2;
+                    for (float i = pointTop; i<=widthBall*11; i += widthBall)
                     {
                         if(min >= Mathf.Abs(hit.point.x - i)){
                             min = Mathf.Abs(hit.point.x - i);

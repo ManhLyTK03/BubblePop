@@ -13,7 +13,19 @@ public class LoadLevel : MonoBehaviour
     public GameObject panelObject;
     public bool movePanel = false;
     public string filePath;
+    public TextAsset fileMap;
     void Start(){
+        // Lấy đường dẫn đầy đủ đến file lưu trữ
+        string fileMapSave = Path.Combine(Application.persistentDataPath, "saveMap.txt");
+        // Kiểm tra xem file đã tồn tại chưa
+        if (!File.Exists(fileMapSave))
+        {
+            // Nếu không tồn tại, tạo file mới và ghi dữ liệu từ TextAsset vào đó
+            using (StreamWriter writer = new StreamWriter(fileMapSave))
+            {
+                writer.Write(fileMap.text);
+            }
+        }
         startTime = Time.time;
         filePath = Path.Combine(Application.persistentDataPath, saveFileName);
         level = PlayerPrefs.GetInt("lever", 1);

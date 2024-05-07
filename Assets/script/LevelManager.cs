@@ -8,9 +8,13 @@ public class LevelManager : MonoBehaviour
     public int[,] levelData;
     public int[] newMap;
     public string path;
+    private int lever;
+    GameObject[] ballMaps;
 
     void Start()
     {
+        // PlayerPrefs.SetInt("lever", 1);
+        lever = PlayerPrefs.GetInt("lever", 1); // Nếu không có giá trị lưu trữ, mặc định lever = 1
         // Khởi tạo mảng 2 chiều
         levelData = new int[0,0];
         newMap = new int[0];
@@ -53,12 +57,16 @@ public class LevelManager : MonoBehaviour
         LoadLevelData();
         foreach (GameObject ballFallObject in GameObject.FindGameObjectsWithTag("ballCreat"))
         {
-            ballFallObject.tag = "ballMap";
+            ballFallObject.tag = "ballFall";
         }
-        GameObject[] ballMaps = GameObject.FindGameObjectsWithTag("ballMap");
+        foreach (GameObject ballFallObject in GameObject.FindGameObjectsWithTag("ballMap"))
+        {
+            ballFallObject.tag = "ballFall";
+        }
+        ballMaps = GameObject.FindGameObjectsWithTag("ballFall");
         // Sắp xếp các GameObject trong mảng
-        Array.Sort(ballMaps, CompareGameObjects);
-
+        SortByPosition();
+        Debug.Log(ballMaps.Length);
         for(int i = 0; i < ballMaps.Length; i++)
         {
             int typeBall = 0;
@@ -104,20 +112,15 @@ public class LevelManager : MonoBehaviour
             AddElement(typeBall);
         }
     }
-    private int CompareGameObjects(GameObject obj1, GameObject obj2)
+    void SortByPosition()
     {
-        // So sánh theo position y
-        int compareY = obj1.transform.position.y.CompareTo(obj2.transform.position.y);
-        
-        // Nếu position y giống nhau, so sánh theo position x
-        if (compareY == 0)
+        // Sắp xếp mảng theo tọa độ y (tăng dần), nếu tọa độ y bằng nhau thì sắp xếp theo tọa độ x (tăng dần)
+        System.Array.Sort(ballMaps, (x, y) =>
         {
-            return obj1.transform.position.x.CompareTo(obj2.transform.position.x);
-        }
-        else
-        {
-            return compareY;
-        }
+            float xPosition = x.transform.position.y * 1000 + x.transform.position.x;
+            float yPosition = y.transform.position.y * 1000 + y.transform.position.x;
+            return xPosition.CompareTo(yPosition);
+        });
     }
     void AddElement(int newElement)
     {

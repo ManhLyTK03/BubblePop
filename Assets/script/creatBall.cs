@@ -95,6 +95,9 @@ public class creatBall : MonoBehaviour
         ballCollor = newColors;
     }
     void creatballRandom(){
+        if(ballCollor.Length == 0){
+            return;
+        }
         if(checkStart){
             bool found = false; // Biến cờ để kiểm tra xem có phần tử nào trùng khớp không
             for (int i = 0; i < ballCollor.Length; i++)

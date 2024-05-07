@@ -40,7 +40,7 @@ public class randomMapedit : MonoBehaviour
         // Kiểm tra xem người dùng đã nhập xong hay chưa
         if (!string.IsNullOrEmpty(text))
         {
-            col = int.Parse(inputField.text);
+            col = int.Parse(inputField.text)-1;
             inputField.gameObject.SetActive(false);
             creatMap();
         }
@@ -88,6 +88,7 @@ public class randomMapedit : MonoBehaviour
                 mapPositions = mapPositions.Concat(new[] { ballPosition }).ToArray();
             }
         }
+        Debug.Log(mapPositions.Length + " " + mapRandom.typeMap.Length);
         for(int i = 0; i < mapRandom.typeMap.Length; i++){
             Sprite spriteRandom = null;
             if(mapRandom.typeMap[i] == 1 || mapRandom.typeMap[i] == 21){
@@ -108,16 +109,25 @@ public class randomMapedit : MonoBehaviour
             if(mapRandom.typeMap[i] == 12){
                 spriteRandom = spriteHole;
             }
+            if(mapRandom.typeMap[i] == 10){
+                spriteRandom = null;
+            }
             if(spriteRandom != null){
                 GameObject newBallMap = Instantiate(ballMap, mapPositions[i], Quaternion.identity); // tạo bóng
                 newBallMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = spriteRandom; // gán img
                 newBallMap.transform.parent = transform;
                 if(mapRandom.typeMap[i] > 20){
-                    newBallMap.transform.parent = transform;
                     GameObject newBallIce = Instantiate(ballIce, mapPositions[i], Quaternion.identity); // tạo băng
                     newBallIce.transform.parent = newBallMap.transform;
                     newBallIce.transform.localScale = new Vector3(1,1,1);
                 }
+                newBallMap.tag = "ballFall";
+            }
+            else{
+                GameObject newBallMap = new GameObject("NewBallMap"); // Tạo một GameObject mới với tên là "NewBallMap"
+                newBallMap.tag = "ballFall";
+                newBallMap.transform.position = mapPositions[i]; // Đặt vị trí của GameObject mới
+                newBallMap.transform.parent = transform;
             }
         }
     }

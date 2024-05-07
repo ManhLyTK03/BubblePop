@@ -73,6 +73,7 @@ public class creatBallMap : MonoBehaviour
                             Vector3 mapPosition = collider.gameObject.transform.position;
                             GameObject newBallMap = new GameObject("NewBallMap"); // Tạo một GameObject mới với tên là "NewBallMap"
                             newBallMap.transform.position = mapPosition; // Đặt vị trí của GameObject mới
+                            newBallMap.transform.parent = transform;
                             newBallMap.tag = "ballFall";
                             AddGameObject(newBallMap);
                         }
