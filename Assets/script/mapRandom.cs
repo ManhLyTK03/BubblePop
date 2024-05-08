@@ -24,9 +24,13 @@ public class mapRandom : MonoBehaviour
     public Vector3 targetMap;
     public float speedMap = 5.0f;
     public float overlapRadius; // Bán kính để tìm các GameObject khác va chạm với "ball"
+    public bool checkScrolling;
+    public static bool checkStop;
     // Start is called before the first frame update
     void Start()
     {
+        checkScrolling = false;
+        checkStop = false;
         col = checkCol(typeMap.Length);
         lostGame.intMaxBall = col + 10;
         leftEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;// Lấy tọa độ x của cạnh trái (left) của màn hình
@@ -44,6 +48,23 @@ public class mapRandom : MonoBehaviour
         {
             if(wallTop.position.y > ballBoom.maxCeiling - widthBall){
                 transform.position = Vector3.Lerp(transform.position, targetMap, speedMap * Time.deltaTime);
+            }
+            else{
+                if(!checkStop){
+                    checkStop = true;
+                }
+                else{
+                    if(checkScrolling){
+                        checkScrolling = false;
+                        creatBall.isCreat = true;
+                    }
+                }
+            }
+        }
+        else{
+            if(checkScrolling){
+                checkScrolling = false;
+                creatBall.isCreat = true;
             }
         }
     }
@@ -117,6 +138,7 @@ public class mapRandom : MonoBehaviour
             else{
                 GameObject newBallMap = new GameObject("NewBallMap"); // Tạo một GameObject mới với tên là "NewBallMap"
                 newBallMap.transform.position = mapPositions[i]; // Đặt vị trí của GameObject mới
+                newBallMap.transform.parent = transform;
             }
         }
     }
@@ -135,6 +157,7 @@ public class mapRandom : MonoBehaviour
         {
             targetMap = new Vector3(transform.position.x, transform.position.y - (minObject.transform.position.y - widthBall / 2), transform.position.z);
         }
+        checkScrolling = true;
     }
     int checkCol(int sumBall){
         int checkRow = 10;

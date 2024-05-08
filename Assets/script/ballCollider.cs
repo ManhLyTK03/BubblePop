@@ -21,7 +21,6 @@ public class ballCollider : MonoBehaviour
             SetPosition.ballDestroys.Clear();
             daVacham = true;
             enabled = false;
-            Invoke("setCreatBall", 0.3f);
             gameObject.SetActive(false);
             // Gọi hàm tắt script
             other.SendMessage("TurnOffScript");
@@ -43,12 +42,8 @@ public class ballCollider : MonoBehaviour
             foreach (GameObject ballMap in ballMaps){
                 Destroy(ballMap);
             }
-            Invoke("setCreatBall", 0.3f);
             Destroy(other.gameObject);
             other.gameObject.tag = tag;
         }
-    }
-    void setCreatBall(){
-        creatBall.isCreat = true;
     }
 }

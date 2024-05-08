@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class starScore : MonoBehaviour
 {
+    public static int intStart;
     public RectTransform maxScore;
     public float widthMaxScore;
     public int intMaxScore = 0;
@@ -14,6 +15,7 @@ public class starScore : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        intStart = 0;
         widthMaxScore = maxScore.sizeDelta.x;
         Invoke("inputCol", 0.1f);
     }
@@ -27,15 +29,24 @@ public class starScore : MonoBehaviour
                 if(starImage[0].sprite != spriteStar){
                     starImage[0].sprite = spriteStar;
                 }
+                if(intStart < 1){
+                    intStart = 1;
+                }
             }
             if(scoreCheck >= intMaxScore*3/4){
                 if(starImage[1].sprite != spriteStar){
                     starImage[1].sprite = spriteStar;
                 }
+                if(intStart < 2){
+                    intStart = 2;
+                }
             }
             if(scoreCheck >= intMaxScore){
                 if(starImage[2].sprite != spriteStar){
                     starImage[2].sprite = spriteStar;
+                }
+                if(intStart < 3){
+                    intStart = 3;
                 }
             }
             float width = widthScore();

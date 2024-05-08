@@ -45,10 +45,15 @@ public class creatBall : MonoBehaviour
     void checkBallColors(){
         uniqueColors.Clear(); // Xóa tất cả màu sắc hiện có từ HashSet
         ballCollor = new string[0];
+        float maxCheckBall = ballBoom.maxCeiling/2f;
+        if(mapRandom.checkStop){
+            maxCheckBall = 100f;
+        }
+        Debug.Log(maxCheckBall);
         // Lặp qua các quả bóng và lấy màu sắc của chúng
         foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("ballMap"))
         {
-            if(ballMap.transform.position.y < ballBoom.maxCeiling){
+            if(ballMap.transform.position.y < maxCheckBall){
                 // Lấy component SpriteRenderer sprite name của quả bóng
                 string renderer = ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
                 if (renderer != null)
@@ -61,7 +66,7 @@ public class creatBall : MonoBehaviour
         }
         foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("ballIce"))
         {
-            if(ballMap.transform.position.y < ballBoom.maxCeiling){
+            if(ballMap.transform.position.y < maxCheckBall){
                 // Lấy component SpriteRenderer sprite name của quả bóng
                 string renderer = ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
                 // Kiểm tra xem phần tử hiện tại có kết thúc bằng "Ice" không

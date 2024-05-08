@@ -1,14 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class lostGame : MonoBehaviour
 {
     public static int intMaxBall = 0;
     public Text numberBallText;
+    public Text scoreWin;
     private int numBalls = 0;
     public GameObject panelLost;
     public static bool checkWin = false;
+    public SpriteRenderer imgPanel;
+    public Sprite spriteWin;
+    public SpriteRenderer[] imgStart;
+    public Sprite[] spriteStart;
+    public GameObject buttonWin;
+    public RectTransform buttonHome;
+    public RectTransform buttonRestart;
 
     void Update()
     {
@@ -52,12 +59,23 @@ public class lostGame : MonoBehaviour
         }
     }
     void loadWin(){
+        SaveWin();
+        panelLost.SetActive(true);
+        buttonWin.SetActive(true);
+        scoreWin.text = Score.intScore.ToString();
+        float width = buttonWin.GetComponent<RectTransform>().rect.width/2f;
+        buttonHome.anchoredPosition = new Vector2(-width - buttonHome.rect.width/2f, buttonHome.anchoredPosition.y);
+        buttonRestart.anchoredPosition = new Vector2(width + buttonHome.rect.width/2f, buttonHome.anchoredPosition.y);
+        imgPanel.sprite = spriteWin;
+        Debug.Log(starScore.intStart);
+        for(int i = 0; i < starScore.intStart; i++){
+            imgStart[i].sprite = spriteStart[i];
+        }
+    }
+    void SaveWin(){
         int lever = PlayerPrefs.GetInt("lever", 1);
         lever++;
-        // Lưu giá trị mới của lever vào PlayerPrefs
         PlayerPrefs.SetInt("lever", lever);
-        // Gọi Save() để lưu thay đổi xuống ổ đĩa
         PlayerPrefs.Save();
-        SceneManager.LoadScene("mainMenu");
     }
 }

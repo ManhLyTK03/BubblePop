@@ -19,7 +19,7 @@ public class Score : MonoBehaviour
     {
         if(score != intScore){
             score = intScore;
-            scoreText.text = intScore + " " + intCombo;
+            scoreText.text = intScore + "";
         }
     }
 }
