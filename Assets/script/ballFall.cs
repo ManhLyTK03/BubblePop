@@ -46,6 +46,7 @@ public class ballFall : MonoBehaviour
                 if(ball.GetComponent<ballFall>().checkConnect == 0){
                     DisableAllScripts(ball);
                     ball.tag = "ballFall";
+                    ball.layer = LayerMask.NameToLayer("ballFall");
                     // Tắt collider trigger
                     ball.GetComponent<Collider2D>().isTrigger = false;
                     ball.layer = LayerMask.NameToLayer("ballFall");

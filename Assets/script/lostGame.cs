@@ -67,7 +67,6 @@ public class lostGame : MonoBehaviour
         buttonHome.anchoredPosition = new Vector2(-width - buttonHome.rect.width/2f, buttonHome.anchoredPosition.y);
         buttonRestart.anchoredPosition = new Vector2(width + buttonHome.rect.width/2f, buttonHome.anchoredPosition.y);
         imgPanel.sprite = spriteWin;
-        Debug.Log(starScore.intStart);
         for(int i = 0; i < starScore.intStart; i++){
             imgStart[i].sprite = spriteStart[i];
         }

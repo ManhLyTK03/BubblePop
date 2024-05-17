@@ -20,7 +20,7 @@ public class mapRandom : MonoBehaviour
     public float leftEdgeX,rightEdgeX;
     public Vector3[] mapPositions;
     public static int[] typeMap;
-    private float widthMap;
+    private float widthMap  = 0.0f;
     public Vector3 targetMap;
     public float speedMap = 5.0f;
     public float overlapRadius; // Bán kính để tìm các GameObject khác va chạm với "ball"
@@ -81,10 +81,7 @@ public class mapRandom : MonoBehaviour
     }
     void creatMap(){
         mapPositions = new Vector3[0];
-        widthMap = widthBall + (widthBall/2)*Mathf.Sqrt(3f)*col;
         wallTop.localScale = new Vector3(wallTop.localScale.x, widthBall/2, wallTop.localScale.z);
-        wallTop.position = new Vector3(wallTop.transform.position.x, widthMap, wallTop.transform.position.z);
-        wallTopImg.position = new Vector3(wallTopImg.transform.position.x, widthMap + wallTopImg.localScale.y, wallTopImg.transform.position.z);
         for (int i = 0; i <= col ; i++)
         {
             for (int j = 0; j <= row + ((i+1)%2)-1; j++)
@@ -92,6 +89,16 @@ public class mapRandom : MonoBehaviour
                 float pointX = leftEdgeX + widthBall/(((i+1)%2)+1) + widthBall*j;
                 Vector3 ballPosition = new Vector3(Mathf.Round(pointX * 100f) / 100f, widthBall/2f + Mathf.Sqrt(3f)*widthBall*i/2f,0f);
                 mapPositions = mapPositions.Concat(new[] { ballPosition }).ToArray();
+            }
+        }
+        for(int i = typeMap.Length-1; i >= 0; i--){
+            if(typeMap[i] != 10){
+                if(widthMap == 0.0f){
+                    widthMap = widthBall/2 + mapPositions[i].y;
+                    wallTop.position = new Vector3(wallTop.transform.position.x, widthMap, wallTop.transform.position.z);
+                    wallTopImg.position = new Vector3(wallTopImg.transform.position.x, widthMap + wallTopImg.localScale.y, wallTopImg.transform.position.z);
+                    break;
+                }
             }
         }
         for(int i = 0; i < typeMap.Length; i++){

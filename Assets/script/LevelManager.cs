@@ -66,7 +66,6 @@ public class LevelManager : MonoBehaviour
         ballMaps = GameObject.FindGameObjectsWithTag("ballFall");
         // Sắp xếp các GameObject trong mảng
         SortByPosition();
-        Debug.Log(ballMaps.Length);
         for(int i = 0; i < ballMaps.Length; i++)
         {
             int typeBall = 0;
@@ -141,5 +140,6 @@ public class LevelManager : MonoBehaviour
     public void tryMap(){
         mapRandom.typeMap = newMap;
         SceneManager.LoadScene("mainPlay");
+        Debug.Log("Starting");
     }
 }

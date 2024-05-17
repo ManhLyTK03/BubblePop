@@ -9,7 +9,7 @@ public class ghiban : MonoBehaviour
     private string colorBall;
     public float widthBall;
     public SpriteRenderer ballRenderer;
-    public static bool checkGhiban = false;
+    public static bool checkGhiban;
     public string objectColor;
     public int checkSoluong;
 
@@ -46,7 +46,7 @@ public class ghiban : MonoBehaviour
                     objectColor = collider.gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
                     if (objectColor == colorBall)
                     {
-                            collider.gameObject.GetComponent<ghiban>()._ghiban();
+                        collider.gameObject.GetComponent<ghiban>()._ghiban();
                     }
                 }
             }

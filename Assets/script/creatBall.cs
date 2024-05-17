@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class creatBall : MonoBehaviour
 {
-    public static bool isCreat = false;
+    public static bool isCreat;
     public GameObject ballFire; // Quả bóng mẫu bắn
     public Transform pointFire; // Điểm tạo bóng bắn
     public GameObject ballNext; // Quả bóng mẫu next
@@ -27,14 +27,14 @@ public class creatBall : MonoBehaviour
         {
             spriteDictionary.Add(sprite.name, sprite);
         }
-        Invoke("checkBallColors", 0.1f);
+        isCreat = true;
     }
     // Update is called once per frame
     void Update()
     {
         if(isCreat){
             isCreat = false;
-            Invoke("Destroy_Creat", 0.1f);
+            _checkCreat();
         }
     }
     void Destroy_Creat(){
@@ -49,7 +49,6 @@ public class creatBall : MonoBehaviour
         if(mapRandom.checkStop){
             maxCheckBall = 100f;
         }
-        Debug.Log(maxCheckBall);
         // Lặp qua các quả bóng và lấy màu sắc của chúng
         foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("ballMap"))
         {
@@ -105,13 +104,36 @@ public class creatBall : MonoBehaviour
         }
         if(checkStart){
             bool found = false; // Biến cờ để kiểm tra xem có phần tử nào trùng khớp không
-            for (int i = 0; i < ballCollor.Length; i++)
+            // for (int i = 0; i < ballCollor.Length; i++)
+            // {
+            //     if (n == ballCollor[i])
+            //     {
+            //         m = n; // Gán m bằng nếu n trùng khớp với phần tử nào đó trong mảng ballColor
+            //         found = true; // Đặt cờ thành true
+            //         break; // Thoát khỏi vòng lặp sau khi tìm thấy phần tử trùng khớp
+            //     }
+            // }
+            // Lặp qua các quả bóng và lấy màu sắc của chúng
+            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("ballMap"))
             {
-                if (n == ballCollor[i])
-                {
-                    m = n; // Gán m bằng nếu n trùng khớp với phần tử nào đó trong mảng ballColor
-                    found = true; // Đặt cờ thành true
-                    break; // Thoát khỏi vòng lặp sau khi tìm thấy phần tử trùng khớp
+                if(ballMap.transform.position.y < ballBoom.maxCeiling){
+                    if (n == ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name)
+                    {
+                        m = n; // Gán m bằng nếu n trùng khớp với phần tử nào đó trong mảng ballColor
+                        found = true; // Đặt cờ thành true
+                        break; // Thoát khỏi vòng lặp sau khi tìm thấy phần tử trùng khớp
+                    }
+                }
+            }
+            foreach (GameObject ballMap in GameObject.FindGameObjectsWithTag("ballIce"))
+            {
+                if(ballMap.transform.position.y < ballBoom.maxCeiling){
+                    if (n == ballMap.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name)
+                    {
+                        m = n; // Gán m bằng nếu n trùng khớp với phần tử nào đó trong mảng ballColor
+                        found = true; // Đặt cờ thành true
+                        break; // Thoát khỏi vòng lặp sau khi tìm thấy phần tử trùng khớp
+                    }
                 }
             }
             if (!found)
@@ -168,6 +190,15 @@ public class creatBall : MonoBehaviour
                 // Sử dụng sprite được tìm thấy
                 newBallNext.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = nextSprite;
             }
+        }
+    }
+    void _checkCreat(){
+        GameObject[] balls = GameObject.FindGameObjectsWithTag("ballFall");
+        if (balls.Length == 0) {
+            Invoke("Destroy_Creat", 0.1f);
+        }
+        else{
+            Invoke("_checkCreat", 0.1f);
         }
     }
 }

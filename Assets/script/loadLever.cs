@@ -33,10 +33,10 @@ public class LoadLevel : MonoBehaviour
     }
     void Update(){
         if(movePanel){
-            journeyLength = Vector3.Distance(panelObject.transform.position, new Vector3(0,0,0));
+            journeyLength = Vector3.Distance(panelObject.transform.position, new Vector3(panelObject.transform.position.x,0,0));
             float distanceCovered = (Time.time - startTime) * speed;
             float fractionOfJourney = distanceCovered / journeyLength;
-            panelObject.transform.position = Vector3.Lerp(panelObject.transform.position, new Vector3(0,0,0), fractionOfJourney);
+            panelObject.transform.position = Vector3.Lerp(panelObject.transform.position, new Vector3(panelObject.transform.position.x,0,0), fractionOfJourney);
         }
     }
     public void LoadLevelMap()
