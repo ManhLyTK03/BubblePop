@@ -134,11 +134,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25963cdf4930e4540976fba3dc93eb61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveFileName: saveMap.txt
   speed: 0.8
   panelObject: {fileID: 0}
   movePanel: 0
-  filePath: "C:/Users/manhl/AppData/LocalLow/M\u1EA1nh L\xFD/bubble pop Map\\saveMap.txt"
+  fileMap: {fileID: 4900000, guid: d6970d69f39d91f469887965b1d19ca1, type: 3}
 --- !u!1 &3109601984607774343
 GameObject:
   m_ObjectHideFlags: 0

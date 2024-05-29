@@ -2,17 +2,21 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UI;
+
 
 public class LevelManager : MonoBehaviour
 {
     public int[,] levelData;
     public int[] newMap;
     public string path;
+    public TextAsset fileMap; // Tệp TextAsset chứa dữ liệu map
     private int lever;
     GameObject[] ballMaps;
 
     void Start()
     {
+        LoadLevelData();
         //PlayerPrefs.SetInt("lever", 1);
         lever = PlayerPrefs.GetInt("lever", 1); // Nếu không có giá trị lưu trữ, mặc định lever = 1
         // Khởi tạo mảng 2 chiều
@@ -53,7 +57,6 @@ public class LevelManager : MonoBehaviour
     }
     public void _checkMap(){
         newMap = new int[0];
-        LoadLevelData();
         foreach (GameObject ballFallObject in GameObject.FindGameObjectsWithTag("ballCreat"))
         {
             ballFallObject.tag = "ballFall";
@@ -139,5 +142,10 @@ public class LevelManager : MonoBehaviour
     public void tryMap(){
         mapRandom.typeMap = newMap;
         SceneManager.LoadScene("mainPlay");
+    }
+    public void coppyMap(Text textMain){
+        string fileContent = File.ReadAllText(path);
+        textMain.text = path;
+        GUIUtility.systemCopyBuffer = fileContent;
     }
 }
