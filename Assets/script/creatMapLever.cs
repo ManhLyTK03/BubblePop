@@ -16,9 +16,10 @@ public class creatMapLever : MonoBehaviour
     public float topX,bottomX;
     public int intLeverTop = 0;
     public int intLeverBottom = 0;
-    public int intMaxLevel = 0;
     public string path;
     public Transform pointCenter;
+    public SpriteRenderer[] rendererStars;
+    public Sprite[] starImages;
     // Start is called before the first frame update
     
     void Start()
@@ -41,23 +42,16 @@ public class creatMapLever : MonoBehaviour
         TopY = null;
         BottomY = null;
         path = Path.Combine(Application.persistentDataPath, "saveMap.txt");
-
         if (!File.Exists(path))
         {
             path = Path.Combine(Application.persistentDataPath, "saveMap.txt");
         }
-        intMaxLevel = MaxLevel();
     }
     void Update(){
         if(pointTop.y < topEdgeY - 1f){
             GameObject buttonLeverNew;
             intLeverTop++;
-            if(intLeverTop <= intMaxLevel){
-                buttonLeverNew = Instantiate(buttonLever, pointTop, Quaternion.identity);
-            }
-            else{
-                buttonLeverNew = Instantiate(outLevel, pointTop, Quaternion.identity);
-            }
+            buttonLeverNew = Instantiate(outLevel, pointTop, Quaternion.identity);
             textLever = buttonLeverNew.GetComponentInChildren<Text>();
             textLever.text = intLeverTop + "";
             TopY = buttonLeverNew;
@@ -80,6 +74,10 @@ public class creatMapLever : MonoBehaviour
             textLever.text = intLeverBottom + "";
             BottomY = buttonLeverNew;
             buttonLeverNew.transform.parent = transform;
+            for(int i = 0; i < saveStart._intStart(intLeverBottom); i++){
+                rendererStars[i] = buttonLeverNew.transform.GetChild(i).GetComponent<SpriteRenderer>();
+                rendererStars[i].sprite = starImages[i];
+            }
             buttonLeverNew.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             if(pointBottom.x > pointCenter.position.x + 0.1f){
                 bottomX = -maxWall;
@@ -91,18 +89,5 @@ public class creatMapLever : MonoBehaviour
         if(BottomY != null){
             pointBottom = BottomY.transform.position + new Vector3(bottomX,-distanceY,0);
         }
-    }
-    int MaxLevel()
-    {
-        // Đọc dữ liệu từ tệp văn bản
-        string data = File.ReadAllText(path);
-
-        // Tách chuỗi thành các mảng con bằng dấu "\n"
-        string[] arrays = data.Split('\n');
-
-        // Số lượng mảng
-        int arrayCount = arrays.Length;
-        
-        return arrayCount-1;
     }
 }

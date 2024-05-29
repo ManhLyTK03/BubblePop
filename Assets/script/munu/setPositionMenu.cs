@@ -11,6 +11,7 @@ public class setPositionMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 60;
         //set panel main
         int intPos = -3;
         foreach (RectTransform panelMenu in panelMenus)
@@ -32,7 +33,6 @@ public class setPositionMenu : MonoBehaviour
         foreach (RectTransform buttonMenu in buttonMenus)
         {
             if(intPos == 2){
-                Debug.Log(positionButton);
                 buttonMenu.sizeDelta = new Vector2(panelRectTransform.sizeDelta.y*1.5f, buttonMenu.sizeDelta.y);
             }
             else{

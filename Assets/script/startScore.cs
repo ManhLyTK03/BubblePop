@@ -49,7 +49,10 @@ public class starScore : MonoBehaviour
                     intStart = 3;
                 }
             }
-            float width = widthScore();
+            float width = Score.intScore * widthMaxScore / intMaxScore;
+            if(width > widthMaxScore){
+                width = widthMaxScore;
+            }
             // Thay đổi chiều rộng
             scoreObject.sizeDelta = new Vector2(width, scoreObject.sizeDelta.y);
             scoreObject.anchoredPosition = new Vector2(width/2f, scoreObject.anchoredPosition.y);
@@ -58,8 +61,5 @@ public class starScore : MonoBehaviour
     void inputCol(){
         int col = mapRandom.typeMap.Length/20;
         intMaxScore = mapRandom.typeMap.Length*90;
-    }
-    float widthScore(){
-        return Score.intScore * widthMaxScore / intMaxScore;
     }
 }

@@ -32,10 +32,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5214665357496623352}
+  - {fileID: 297845186695919190}
   - {fileID: 8005857731810678560}
   - {fileID: 6222071212174499581}
-  - {fileID: 297845186695919190}
+  - {fileID: 5214665357496623352}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 6222071212174499581}
   - component: {fileID: 3223940549136707250}
   m_Layer: 0
-  m_Name: star_big_center_bg (1)
+  m_Name: star_big_center_bg (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 297845186695919190}
   - component: {fileID: 2084773069304361657}
   m_Layer: 0
-  m_Name: star_big_center_bg (2)
+  m_Name: star_big_center_bg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 8005857731810678560}
   - component: {fileID: 3772398514090819556}
   m_Layer: 0
-  m_Name: star_big_center_bg
+  m_Name: star_big_center_bg (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

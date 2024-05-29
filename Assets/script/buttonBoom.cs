@@ -19,66 +19,86 @@ public class buttonBoom : MonoBehaviour
     }
     public void creatBoom()
     {
-        if(boolBoom){
-            ballFire = GameObject.FindGameObjectWithTag("ballFire");
-            newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
-            newBallBoom.tag = "ballBoom";
-            ballFireOld = ballFire;
-            ballFire.SetActive(false);
+        if(PlayerPrefs.GetInt("ballBoom", 0) > 0){
+            if(boolBoom){
+                ballFire = GameObject.FindGameObjectWithTag("ballFire");
+                if(ballFire == null){
+                    return;
+                }
+                newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
+                newBallBoom.tag = "ballBoom";
+                ballFireOld = ballFire;
+                ballFire.SetActive(false);
+            }
+            else{
+                ballFire = newBallBoom;
+                Destroy(ballFire);
+                ballFireOld.SetActive(true);
+            }
+            boolBoom = !boolBoom;
         }
-        else{
-            ballFire = newBallBoom;
-            Destroy(ballFire);
-            ballFireOld.SetActive(true);
-        }
-        boolBoom = !boolBoom;
     }
     public void creatLine()
     {
-        if(boolBoom){
-            ballFire = GameObject.FindGameObjectWithTag("ballFire");
-            newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
-            newBallBoom.tag = "ballLine";
-            ballFireOld = ballFire;
-            ballFire.SetActive(false);
+        if(PlayerPrefs.GetInt("ballLine", 0) > 0){
+            if(boolBoom){
+                ballFire = GameObject.FindGameObjectWithTag("ballFire");
+                if(ballFire == null){
+                    return;
+                }
+                newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
+                newBallBoom.tag = "ballLine";
+                ballFireOld = ballFire;
+                ballFire.SetActive(false);
+            }
+            else{
+                ballFire = newBallBoom;
+                Destroy(ballFire);
+                ballFireOld.SetActive(true);
+            }
+            boolBoom = !boolBoom;
         }
-        else{
-            ballFire = newBallBoom;
-            Destroy(ballFire);
-            ballFireOld.SetActive(true);
-        }
-        boolBoom = !boolBoom;
     }
     public void creatlaze()
     {
-        if(boolBoom){
-            ballFire = GameObject.FindGameObjectWithTag("ballFire");
-            newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
-            newBallBoom.tag = "ballLaze";
-            ballFireOld = ballFire;
-            ballFire.SetActive(false);
+        if(PlayerPrefs.GetInt("ballLaze", 0) > 0){
+            if(boolBoom){
+                ballFire = GameObject.FindGameObjectWithTag("ballFire");
+                if(ballFire == null){
+                    return;
+                }
+                newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
+                newBallBoom.tag = "ballLaze";
+                ballFireOld = ballFire;
+                ballFire.SetActive(false);
+            }
+            else{
+                ballFire = newBallBoom;
+                Destroy(ballFire);
+                ballFireOld.SetActive(true);
+            }
+            boolBoom = !boolBoom;
         }
-        else{
-            ballFire = newBallBoom;
-            Destroy(ballFire);
-            ballFireOld.SetActive(true);
-        }
-        boolBoom = !boolBoom;
     }
     public void creatRainbow()
     {
-        if(boolBoom){
-            ballFire = GameObject.FindGameObjectWithTag("ballFire");
-            newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
-            newBallBoom.tag = "ballRainbow";
-            ballFireOld = ballFire;
-            ballFire.SetActive(false);
+        if(PlayerPrefs.GetInt("rainBow", 0) > 0){
+            if(boolBoom){
+                ballFire = GameObject.FindGameObjectWithTag("ballFire");
+                if(ballFire == null){
+                    return;
+                }
+                newBallBoom = Instantiate(ballBoom, pointFire.position, Quaternion.identity); // Tạo bóng bắn mới
+                newBallBoom.tag = "ballRainbow";
+                ballFireOld = ballFire;
+                ballFire.SetActive(false);
+            }
+            else{
+                ballFire = newBallBoom;
+                Destroy(ballFire);
+                ballFireOld.SetActive(true);
+            }
+            boolBoom = !boolBoom;
         }
-        else{
-            ballFire = newBallBoom;
-            Destroy(ballFire);
-            ballFireOld.SetActive(true);
-        }
-        boolBoom = !boolBoom;
     }
 }

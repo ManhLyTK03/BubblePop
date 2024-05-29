@@ -37,7 +37,6 @@ public class mapRandom : MonoBehaviour
         rightEdgeX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
         widthBall = ballSR.bounds.size.x; // Lấy độ rộng của SpriteRenderer
         overlapRadius = (widthBall/2)*1.5f;
-        // Cập nhật vị trí của wallTop
         creatMap();
     }
     void Update(){

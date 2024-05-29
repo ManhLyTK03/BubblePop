@@ -43,10 +43,19 @@ public class CheckCollider : MonoBehaviour
     }
     void checkDestroy(){
         if(SetPosition.ballDestroys.Count >= 3){
-            if(Score.intCombo < 5){
-                Score.intCombo += 1;
+            Score.intCombo += 1;
+            if(PlayerPrefs.GetInt("Stask", -1) == 2){
+                int pass = PlayerPrefs.GetInt("pass", -1);
+                if(pass < Score.intCombo){
+                    pass = Score.intCombo;
+                }
+                PlayerPrefs.SetInt("pass", pass);
             }
-            Score.intScore += (SetPosition.ballDestroys.Count-1)*10*Score.intCombo;
+            int setCombo = Score.intCombo;
+            if(Score.intCombo > 5){
+                setCombo = 5;
+            }
+            Score.intScore += (SetPosition.ballDestroys.Count-1)*10*setCombo;
             _Destroy();
         }
         else{
@@ -67,6 +76,11 @@ public class CheckCollider : MonoBehaviour
             else{
                 Destroy(SetPosition.ballDestroys[0]); // Hủy GameObject trước
                 SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
+                if(PlayerPrefs.GetInt("Stask", -1) == 3){
+                    int pass = PlayerPrefs.GetInt("pass", -1);
+                    pass++;
+                    PlayerPrefs.SetInt("pass", pass);
+                }
             }
         }
         SetPosition.ballDestroys.Clear();

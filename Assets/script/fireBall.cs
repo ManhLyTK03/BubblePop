@@ -48,6 +48,11 @@ public class fireBall : MonoBehaviour
             if (Vector3.Distance(transform.position, targetPoint) < 0.5f)
             {
                 if(pointLine < aimingLine.pointHit.Length - 1){
+                    if(PlayerPrefs.GetInt("Stask", -1) == 0){
+                        int pass = PlayerPrefs.GetInt("pass", -1);
+                        pass++;
+                        PlayerPrefs.SetInt("pass", pass);
+                    }
                     transform.position = targetPoint;
                     pointLine++;
                 }

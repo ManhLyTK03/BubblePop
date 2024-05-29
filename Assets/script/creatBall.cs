@@ -34,7 +34,7 @@ public class creatBall : MonoBehaviour
     {
         if(isCreat){
             isCreat = false;
-            _checkCreat();
+            Destroy_Creat();
         }
     }
     void Destroy_Creat(){

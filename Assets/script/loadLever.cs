@@ -5,6 +5,7 @@ using System.IO;
 public class LoadLevel : MonoBehaviour
 {
     public static int level = 1;
+    public static int levelPlay = 1;
     public string saveFileName = "saveMap.txt";
     public static int[] levelInfo;
     public float speed = 0.8f;
@@ -42,6 +43,7 @@ public class LoadLevel : MonoBehaviour
     public void LoadLevelMap()
     {
         Text textLevel = GetComponentInChildren<Text>();
+        levelPlay = int.Parse(textLevel.text);
         if (textLevel != null)
         {
             if (int.TryParse(textLevel.text, out level))

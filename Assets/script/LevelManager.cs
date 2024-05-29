@@ -13,7 +13,7 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        // PlayerPrefs.SetInt("lever", 1);
+        //PlayerPrefs.SetInt("lever", 1);
         lever = PlayerPrefs.GetInt("lever", 1); // Nếu không có giá trị lưu trữ, mặc định lever = 1
         // Khởi tạo mảng 2 chiều
         levelData = new int[0,0];
@@ -29,7 +29,6 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i <= newMap.Length - 1; i++)
         {
             data += newMap[i];
-            Debug.Log(newMap[i]);
             if (i != newMap.Length - 1){
                 data += ",";
             }
@@ -140,6 +139,5 @@ public class LevelManager : MonoBehaviour
     public void tryMap(){
         mapRandom.typeMap = newMap;
         SceneManager.LoadScene("mainPlay");
-        Debug.Log("Starting");
     }
 }

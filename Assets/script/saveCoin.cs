@@ -16,6 +16,9 @@ public class saveCoin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(coin != PlayerPrefs.GetInt("coin", 0)){
+            coin = PlayerPrefs.GetInt("coin", 0); // Nếu không có giá trị lưu trữ, mặc định coin = 0
+            coinText.text = coin + "";
+        }
     }
 }

@@ -59,7 +59,6 @@ public class lostGame : MonoBehaviour
         }
     }
     void loadWin(){
-        SaveWin();
         panelLost.SetActive(true);
         buttonWin.SetActive(true);
         scoreWin.text = Score.intScore.ToString();
@@ -69,12 +68,24 @@ public class lostGame : MonoBehaviour
         imgPanel.sprite = spriteWin;
         for(int i = 0; i < starScore.intStart; i++){
             imgStart[i].sprite = spriteStart[i];
+            if(PlayerPrefs.GetInt("Stask", -1) == 1){
+                int pass = PlayerPrefs.GetInt("pass", -1);
+                pass++;
+                PlayerPrefs.SetInt("pass", pass);
+            }
         }
+        SaveWin();
     }
     void SaveWin(){
         int lever = PlayerPrefs.GetInt("lever", 1);
-        lever++;
-        PlayerPrefs.SetInt("lever", lever);
-        PlayerPrefs.Save();
+        if(LoadLevel.levelPlay == lever){
+            lever++;
+            PlayerPrefs.SetInt("lever", lever);
+            PlayerPrefs.Save();
+            saveStart.saveFile(starScore.intStart);
+        }
+        else{
+            saveStart.restartStart(LoadLevel.levelPlay,starScore.intStart);
+        }
     }
 }

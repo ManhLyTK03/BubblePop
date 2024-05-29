@@ -20,7 +20,12 @@ public class TextDisplay : MonoBehaviour
             textSpawnPoint = other.gameObject.transform.position;
             other.gameObject.tag = "ground";
             Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
-            Destroy(other.gameObject, 1.5f);
+            Destroy(other.gameObject, 1f);
+            if(PlayerPrefs.GetInt("Stask", -1) == 4){
+                int pass = PlayerPrefs.GetInt("pass", -1);
+                pass++;
+                PlayerPrefs.SetInt("pass", pass);
+            }
             StartCoroutine(DisplayTextAndFade(intHole + "",textSpawnPoint)); // Bắt đầu coroutine để hiển thị và mờ dần Text
         }
     }
