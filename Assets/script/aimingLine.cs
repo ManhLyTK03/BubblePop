@@ -18,8 +18,13 @@ public class aimingLine : MonoBehaviour
     public float widthBall;// chiều rộng của bóng
     public float distanceX,distanceY;
     public float leftEdgeX;
+    public LayerMask layerMask;
 
     void Start(){
+        // Đặt layerMask là layer "ball"
+        int ballLayer = LayerMask.NameToLayer("hitCollider");
+        layerMask = 1 << ballLayer;
+
         lineRenderer = GetComponent<LineRenderer>();
         startPoint = GetComponent<Transform>();
         widthBall = ballRenderer.bounds.size.x;
@@ -72,7 +77,8 @@ public class aimingLine : MonoBehaviour
                 Cannon.rotation = Quaternion.AngleAxis(angleCannon, Vector3.forward);
                 
                 // Tạo một ray từ vị trí của đối tượng đến chuột
-                hit = Physics2D.CircleCast(startPoint.position,widthBall/2, direction); 
+                // hit = Physics2D.CircleCast(startPoint.position, widthBall/2, direction);
+                hit = Physics2D.CircleCast(startPoint.position, widthBall/2, direction, Mathf.Infinity, layerMask);
                     
                 lineRenderer.SetPosition(0, pointHit[0]);
                 if(ballFireObject.tag == "ballLine"){
@@ -89,7 +95,8 @@ public class aimingLine : MonoBehaviour
                             lineRenderer.SetPosition(i, pointHit[i]);
                             if(hit.collider.tag == "vienMH"){
                                 direction = Vector2.Reflect(direction, hit.normal);
-                                hit = Physics2D.CircleCast(pointHit[i],widthBall/2, direction); 
+                                // hit = Physics2D.CircleCast(pointHit[i], widthBall/2, direction); 
+                                hit = Physics2D.CircleCast(pointHit[i], widthBall/2, direction, Mathf.Infinity, layerMask);
                             }
                             else{
                                 break;

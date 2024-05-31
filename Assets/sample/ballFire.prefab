@@ -115,7 +115,7 @@ Transform:
   m_GameObject: {fileID: 4608967640174541184}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.2057198, y: -0.9255465, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea98f9b7804b7224b9f5a3238c5df90e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballSpeed: 10
+  ballSpeed: 17
   mousePosition: {x: 0, y: 0, z: 0}
   checkClickDown: 0
 --- !u!114 &2438335973181607106

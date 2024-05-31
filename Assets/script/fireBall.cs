@@ -42,10 +42,11 @@ public class fireBall : MonoBehaviour
         }
         if(boolFire){
             Vector3 targetPoint = aimingLine.pointHit[pointLine];
-            transform.position = Vector3.Lerp(transform.position, targetPoint, Time.deltaTime * ballSpeed);
+            // transform.position = Vector3.Lerp(transform.position, targetPoint, Time.deltaTime * ballSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, targetPoint, ballSpeed * Time.deltaTime);
 
             // Kiểm tra nếu quả bóng đã đến gần điểm đích, thì di chuyển tiếp tới point tiếp theo
-            if (Vector3.Distance(transform.position, targetPoint) < 0.5f)
+            if (Vector3.Distance(transform.position, targetPoint) < 0.1f)
             {
                 if(pointLine < aimingLine.pointHit.Length - 1){
                     if(PlayerPrefs.GetInt("Stask", -1) == 0){

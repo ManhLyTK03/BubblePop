@@ -1178,6 +1178,7 @@ MonoBehaviour:
   speedMap: 5
   overlapRadius: 0
   checkScrolling: 0
+  pointMain: 10
 --- !u!4 &437734330
 Transform:
   m_ObjectHideFlags: 0
@@ -1882,7 +1883,7 @@ GameObject:
   - component: {fileID: 646169571}
   - component: {fileID: 646169572}
   - component: {fileID: 646169573}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wallLeft
   m_TagString: vienMH
   m_Icon: {fileID: 0}
@@ -2353,6 +2354,9 @@ MonoBehaviour:
   distanceX: 0
   distanceY: 0
   leftEdgeX: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!120 &798458022
 LineRenderer:
   serializedVersion: 2
@@ -6399,7 +6403,7 @@ GameObject:
   - component: {fileID: 1860844200}
   - component: {fileID: 1860844202}
   - component: {fileID: 1860844201}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wallRight
   m_TagString: vienMH
   m_Icon: {fileID: 0}
@@ -7893,6 +7897,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f539a135f04ab409df766e4f74cbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeDestroy: 0.4
+  timeDelay: 0.01
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

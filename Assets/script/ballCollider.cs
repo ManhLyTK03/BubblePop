@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ballCollider : MonoBehaviour
 {
     public static bool isArrange = false; // Check va chạm
     public static bool daVacham = false; // Check va chạm công khai
+    public float timeDestroy = 2f;
+    public float timeDelay = 0.02f;
     void OnTriggerEnter2D(Collider2D other){
         if(other.gameObject.tag == "ballFire" && !isArrange){
             other.transform.position = transform.position;
+            other.gameObject.layer = LayerMask.NameToLayer("hitCollider");
             isArrange = true;
             // Kiểm tra xem GameObject đã có Rigidbody2D chưa
             Rigidbody2D rb2D = other.GetComponent<Rigidbody2D>();
@@ -27,6 +31,7 @@ public class ballCollider : MonoBehaviour
             other.SendMessage("TurnOffScript");
             other.gameObject.tag = "ballMap";
             other.transform.parent = GameObject.FindWithTag("mapRD").transform;
+            Invoke("checkDestroy", 0.05f);
         }
         if((other.gameObject.tag == "ballBoom" || other.gameObject.tag == "ballLine" || other.gameObject.tag == "ballLaze" || other.gameObject.tag == "ballRainbow") && !isArrange){
             string tag = other.gameObject.tag;
@@ -72,5 +77,60 @@ public class ballCollider : MonoBehaviour
             Destroy(other.gameObject);
             other.gameObject.tag = tag;
         }
+    }
+    void checkDestroy(){
+        if(SetPosition.ballDestroys.Count >= 3){
+            Debug.Log(SetPosition.ballDestroys.Count);
+            timeDelay = timeDestroy/SetPosition.ballDestroys.Count;
+            Invoke("endDestroy", timeDelay*SetPosition.ballDestroys.Count);
+            Score.intCombo += 1;
+            if(PlayerPrefs.GetInt("Stask", -1) == 2){
+                int pass = PlayerPrefs.GetInt("pass", -1);
+                if(pass < Score.intCombo){
+                    pass = Score.intCombo;
+                }
+                PlayerPrefs.SetInt("pass", pass);
+            }
+            int setCombo = Score.intCombo;
+            if(Score.intCombo > 5){
+                setCombo = 5;
+            }
+            Score.intScore += (SetPosition.ballDestroys.Count-1)*10*setCombo;
+            // Sắp xếp các game object trong list theo khoảng cách tới targetPosition
+            SetPosition.ballDestroys = SetPosition.ballDestroys.OrderBy(ball => Vector3.Distance(ball.transform.position, transform.position)).ToList();
+            _Destroy();
+        }
+        else{
+            ghiban.checkGhiban = true;
+            Score.intCombo = 0;
+            SetPosition.ballDestroys.Clear();
+        }
+    }
+    void _Destroy(){
+        int check = 0;
+        while (SetPosition.ballDestroys.Count > 0)
+        {
+            if(SetPosition.ballDestroys[0].tag == "ballIce"){
+                SetPosition.ballDestroys[0].tag = "ballMap";
+                GameObject ballIceDestroy = SetPosition.ballDestroys[0].transform.GetChild(1).gameObject;
+                Destroy(ballIceDestroy,timeDelay*check);
+                SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
+            }
+            else{
+                Destroy(SetPosition.ballDestroys[0],timeDelay*check); // Hủy GameObject trước
+                SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
+                if(PlayerPrefs.GetInt("Stask", -1) == 3){
+                    int pass = PlayerPrefs.GetInt("pass", -1);
+                    pass++;
+                    PlayerPrefs.SetInt("pass", pass);
+                }
+            }
+            check++;
+        }
+        SetPosition.ballDestroys.Clear();
+    }
+    public void endDestroy(){
+        ghiban.checkGhiban = true;
+        Debug.Log(SetPosition.ballDestroys.Count);
     }
 }

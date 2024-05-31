@@ -38,52 +38,6 @@ public class CheckCollider : MonoBehaviour
                 }
             }
             enabled = false;
-            Invoke("checkDestroy", 0.1f);
         }
-    }
-    void checkDestroy(){
-        if(SetPosition.ballDestroys.Count >= 3){
-            Score.intCombo += 1;
-            if(PlayerPrefs.GetInt("Stask", -1) == 2){
-                int pass = PlayerPrefs.GetInt("pass", -1);
-                if(pass < Score.intCombo){
-                    pass = Score.intCombo;
-                }
-                PlayerPrefs.SetInt("pass", pass);
-            }
-            int setCombo = Score.intCombo;
-            if(Score.intCombo > 5){
-                setCombo = 5;
-            }
-            Score.intScore += (SetPosition.ballDestroys.Count-1)*10*setCombo;
-            _Destroy();
-        }
-        else{
-            ghiban.checkGhiban = true;
-            Score.intCombo = 0;
-            SetPosition.ballDestroys.Clear();
-        }
-    }
-    void _Destroy(){
-        while (SetPosition.ballDestroys.Count > 0)
-        {
-            if(SetPosition.ballDestroys[0].tag == "ballIce"){
-                SetPosition.ballDestroys[0].tag = "ballMap";
-                GameObject ballIceDestroy = SetPosition.ballDestroys[0].transform.GetChild(1).gameObject;
-                Destroy(ballIceDestroy);
-                SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
-            }
-            else{
-                Destroy(SetPosition.ballDestroys[0]); // Hủy GameObject trước
-                SetPosition.ballDestroys.RemoveAt(0); // Xóa GameObject khỏi danh sách
-                if(PlayerPrefs.GetInt("Stask", -1) == 3){
-                    int pass = PlayerPrefs.GetInt("pass", -1);
-                    pass++;
-                    PlayerPrefs.SetInt("pass", pass);
-                }
-            }
-        }
-        SetPosition.ballDestroys.Clear();
-        ghiban.checkGhiban = true;
     }
 }

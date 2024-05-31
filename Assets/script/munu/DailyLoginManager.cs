@@ -123,8 +123,10 @@ public class DailyLoginManager : MonoBehaviour
                 giftImages[i].image.sprite = giftSprite1;
             }
         }
-        if(PlayerPrefs.GetInt(ReceiveLoginGiftKey, 1) == 1 && dailyLoginCount == int.Parse(giftImages[(dailyLoginCount/7)-1].GetComponentInChildren<Text>().text)){
-            giftImages[(dailyLoginCount/7)-1].image.sprite = giftSprite;
+        if((dailyLoginCount/7)-1>=0){
+            if(PlayerPrefs.GetInt(ReceiveLoginGiftKey, 1) == 1 && dailyLoginCount == int.Parse(giftImages[(dailyLoginCount/7)-1].GetComponentInChildren<Text>().text)){
+                giftImages[(dailyLoginCount/7)-1].image.sprite = giftSprite;
+            }
         }
     }
     //nhận thưởng

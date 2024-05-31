@@ -25,10 +25,12 @@ public class mapRandom : MonoBehaviour
     public float speedMap = 5.0f;
     public float overlapRadius; // Bán kính để tìm các GameObject khác va chạm với "ball"
     public bool checkScrolling;
+    public float pointMain;
     public static bool checkStop;
     // Start is called before the first frame update
     void Start()
     {
+        Invoke("setMapPosition", 0.1f);
         checkScrolling = false;
         checkStop = false;
         col = checkCol(typeMap.Length);
@@ -86,7 +88,7 @@ public class mapRandom : MonoBehaviour
             for (int j = 0; j <= row + ((i+1)%2)-1; j++)
             {
                 float pointX = leftEdgeX + widthBall/(((i+1)%2)+1) + widthBall*j;
-                Vector3 ballPosition = new Vector3(Mathf.Round(pointX * 100f) / 100f, widthBall/2f + Mathf.Sqrt(3f)*widthBall*i/2f,0f);
+                Vector3 ballPosition = new Vector3(Mathf.Round(pointX * 100f) / 100f,pointMain + widthBall/2f + Mathf.Sqrt(3f)*widthBall*i/2f,0f);
                 mapPositions = mapPositions.Concat(new[] { ballPosition }).ToArray();
             }
         }

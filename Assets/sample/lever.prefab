@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2473973889627661533}
   - component: {fileID: 8798185102120000129}
   - component: {fileID: 5166663555115615942}
-  - component: {fileID: 2697177759297138950}
+  - component: {fileID: 7521269474187714016}
   m_Layer: 5
   m_Name: lever
   m_TagString: Untagged
@@ -125,8 +125,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2697177759297138950}
-        m_TargetAssemblyTypeName: loadLever, Assembly-CSharp
+      - m_Target: {fileID: 7521269474187714016}
+        m_TargetAssemblyTypeName: LoadLevel, Assembly-CSharp
         m_MethodName: LoadLevelMap
         m_Mode: 1
         m_Arguments:
@@ -137,7 +137,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2697177759297138950
+--- !u!114 &7521269474187714016
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,11 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25963cdf4930e4540976fba3dc93eb61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveFileName: saveMap.txt
-  speed: 0.8
-  panelObject: {fileID: 0}
-  movePanel: 0
-  filePath: 
+  panelObject: {fileID: 5281034789045027311, guid: 27161f7c89c4d204688ef6f647594e5f, type: 3}
   fileMap: {fileID: 4900000, guid: d6970d69f39d91f469887965b1d19ca1, type: 3}
 --- !u!1 &2058159472347874119
 GameObject:

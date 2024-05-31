@@ -6,10 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class buttonPlay : MonoBehaviour
 {
-    public static bool boolPanel = false;
+    public GameObject panelObject;
     public Text textLevel;
     void Update(){
-        textLevel.text = LoadLevel.level + "";
+        if(LoadLevel.Click){
+            LoadLevel.Click = false;
+            panelObject.SetActive(true);
+            textLevel.text = "LEVEL " + LoadLevel.levelPlay;
+        }
     }
     public void buttonLever(){
         mapRandom.typeMap = LoadLevel.levelInfo;
@@ -17,6 +21,7 @@ public class buttonPlay : MonoBehaviour
     }
     public void Play(){
         mapRandom.typeMap = LoadLevel.levelInfo;
+        panelObject.SetActive(false);
         SceneManager.LoadScene("mainPlay");
     }
     public void CreateMap(){
